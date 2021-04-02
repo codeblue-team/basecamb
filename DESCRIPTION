@@ -2,8 +2,16 @@ Package: dumb
 Type: Package
 Title: Data analysis Utilities by Marquardt and Best
 Version: 0.0.1
-Author: J. Peter Marquardt <peter@kmarquardt.de> [aut, cre]
-Author: Till D. Best <till-best@gmx.de> [aut, cre]
+Authors@R: 
+  c(person(given = "J. Peter",
+           family = "Marquardt",
+           role = c("aut", 'cre'),
+           email = "peter@kmarquardt.de",
+           comment = c(ORCID = "0000-0002-5596-1357")),
+    person(given = "Till D.",
+           family = "Best",
+           role = c("aut"),
+           comment = c(ORCID = "0000-0001-7323-827X")))
 Maintainer: Till D. Best <till-best@gmx.de>
 Description: Miscellaneous utility functions for data analysis workflows in a biostatistics context.
 Depends: R (>= 4.0.0)
