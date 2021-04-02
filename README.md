@@ -27,4 +27,4 @@ tbd
 
 ## Lifecycle
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-heavy_development-red.svg)](https://www.tidyverse.org/lifecycle/#stable)
+\[![lifecycle](https://img.shields.io/badge/lifecycle-heavy_development-red.svg)\]
