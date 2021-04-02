@@ -15,7 +15,7 @@ Authors@R:
 Maintainer: Till D. Best <till-best@gmx.de>
 Description: Miscellaneous utility functions for data analysis workflows in a biostatistics context.
 Depends: R (>= 4.0.0)
-Imports: assertive.types, readr, dplyr, stringr, mice, Hmisc
+Imports: assertive.types, mice, Hmisc
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
