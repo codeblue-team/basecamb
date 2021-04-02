@@ -8,8 +8,11 @@
 #'
 #' @return formula for use in statistical models
 #'
-#' @example build_model_formula('outcome', c('pred_1', 'pred_2'))
-#' @example build_model_formula('outcome', c('pred_1', 'pred_2'), censor_event='cens_event')
+#' @examples
+#' \dontrun{
+#' build_model_formula('outcome', c('pred_1', 'pred_2'))
+#' build_model_formula('outcome', c('pred_1', 'pred_2'), censor_event='cens_event')
+#' }
 #'
 #' @importFrom assertive.types assert_is_character
 #'
@@ -55,10 +58,13 @@ build_model_formula <- function(outcome, predictors, censor_event=NULL) {
 #' * censor_event (character) (optional) censor event, only for formulas including a Surv() object
 #'
 #' @examples
-#' deconstruct_formula(outcome ~ predictor1 + predictor2 + predictor3)
-#' deconstruct_formula(Surv(outcome, censor_event) ~ predictor)
+#' \dontrun{
+#' deconstruct_formula(stats::as.formula('outcome ~ predictor1 + predictor2 + predictor3'))
+#' deconstruct_formula(stats::as.formula('Surv(outcome, censor_event) ~ predictor'))
+#' }
 #'
 #' @importFrom assertive.types assert_is_formula
+#' @importFrom stats as.formula
 #'
 #' @export
 #'
