@@ -8,11 +8,12 @@
 #' @return a mids object with transformed data
 #'
 #' @importFrom mice as.mids
+#' @importFrom mice complete
 #'
 #' @author J. Peter Marquardt
 apply_function_to_imputed_data <- function(mice_data, fun) {
 
-  long <- complete(mice_data, action = "long", include = TRUE) # convert imputations into a long dataframe
+  long <- mice::complete(mice_data, action = "long", include = TRUE) # convert imputations into a long dataframe
   return_dat <- data.frame()  # initialize empty long dataframe for return
 
   #  apply method to each imputed dataset
