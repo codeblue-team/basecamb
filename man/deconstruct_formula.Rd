@@ -19,8 +19,10 @@ a named list with fields
 Deconstruct a formula object into strings of its components
 }
 \examples{
-deconstruct_formula(outcome ~ predictor1 + predictor2 + predictor3)
-deconstruct_formula(Surv(outcome, censor_event) ~ predictor)
+\dontrun{
+deconstruct_formula(stats::as.formula('outcome ~ predictor1 + predictor2 + predictor3'))
+deconstruct_formula(stats::as.formula('Surv(outcome, censor_event) ~ predictor'))
+}
 
 }
 \author{
