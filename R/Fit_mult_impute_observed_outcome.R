@@ -8,6 +8,7 @@
 #' @param formula a formula object that describes the model to be fit
 #' @param fitter the fitter (i.e. the type of model) used by
 #'   Hmisc::fit.mult.impute to fit the model.
+#' @param ... any other arguments to Hmisc::fit.mult.impute()
 #'
 #' @return mod a fit.mult.impute object
 #'
