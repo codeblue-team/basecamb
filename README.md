@@ -1,10 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dumb
+# basecamb
 
 **B**iomedical **A**pplications of **S**tatistical **E**valuation -
 **C**oding **A**ssets by **M**arquardt and **B**est
+
+[lifecycle](https://img.shields.io/badge/lifecycle-heavy_development-red.svg)
+
+[lifecycle](https://img.shields.io/badge/license-GPL_3-blue.svg)
 
 ## Overview
 
@@ -20,7 +24,3 @@ CRAN. However, you can install the development version:
 # install.packages("devtools")
 devtools::install_github("codeblue-team/basecamb")
 ```
-
-## Lifecycle
-
-![lifecycle](https://img.shields.io/badge/lifecycle-heavy_development-red.svg)
