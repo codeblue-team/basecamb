@@ -1,46 +1,97 @@
-#' Fit a proportional odds model on multiply imputed data
+#' Fit a model on multiply imputed data using only non-missing outcomes
 #'
-#' This function fits an proportional odds logistic regression (a type of
-#'   ordinal logistic regression) on a multiply imputed dataset that was
-#'   generated with mice::mice(). Cases with a missing outcome before imputation
-#'   are removed from the fitting process.
+#' This function fits a regression model using Hmisc::fit.mult.impute() on a
+#'   multiply imputed dataset generated with mice::mice(). Cases with a
+#'   missing outcome are removed from the dataset before model fitting.
 #'
-#' @param imp mids object containing multiple imputations of data generated with
-#'   mice::mice()
-#' @param outcome the outcome column as a string
-#' @param predictors a vector of strings containing the predictors/covariables
-#' @param fitter the fitter used for fitting the model. For details see
+#' @param mids a mids object, i.e. the imputed dataset
+#' @param formula a formula object that describes the model to be fit
+#' @param fitter the fitter (i.e. the type of model) used by
+#'   Hmisc::fit.mult.impute to fit the model.
+#'
+#' @return mod a fit.mult.impute object
+#' 
+#' @examples
+#' \dontrun{
+#' fit_mult_impute_obs_outcome(mids = imputed_data, formula = "y ~ x1 + x2", fitter = orm)
+#' }
+#' 
 #' @importFrom Hmisc fit.mult.impute
+#' @importFrom stats formula
 #'
-#' @return est the pooled estimate
+#' @export
 #'
 #' @author Till D. Best
-fit_mult_impute_obs_outcome <- function(imp,
-                                        outcome,
-                                        predictors,
-                                        fitter = orm) {
-  # calculate the cases with a missing outcome
-  n_miss_outcome <- is.na(imp$data[[outcome]])
-  # filter for complete outcomes
-  imp_filtered <- mice::filter(imp, !n_miss_outcome)
-  # print the number of cases that have a missing outcome
-  message(sprintf("%s cases had a missing outcome and were removed.\n",
-                  sum(n_miss_outcome)))
+fit_mult_impute_obs_outcome <- function(mids,
+                                        formula,
+                                        fitter,
+                                        ...) {
 
-  # generate the model formula
-  formula <- as.formula(paste(outcome,
-    " ~ ",
-    paste(predictors, collapse = " + "),
-    sep = ""
-  ))
+  #TODO use Peters deconstruct_formula to get the y-variable of the formula
 
+  # remove missing cases of the outcome from the variable
+  mids_filtered <- remove_missing_from_mids(mids = mids, var = y_var)
+  
   # fit models
   mod <- Hmisc::fit.mult.impute(
     formula = formula, # model formula
     fitter = fitter, # the type of model fitted
-    xtrans = imp_filtered, # the imputed dataset
-    pr = FALSE, x = TRUE, y = TRUE
+    xtrans = mids_filtered, # the imputed dataset
+    pr = FALSE,
+    x = TRUE,
+    y = TRUE,
+    ... # other arguments to fit.mult.impute()
   )
 
   return(mod)
+}
+
+
+#' Remove missing cases from a mids object
+#' 
+#' remove_missing_from_mids is used to filter a mids object for missing cases
+#'   in the original dataset in the variable var. This is useful for situations
+#'   where you want to use as many observations as possible for imputation but
+#'   only fit your model on a subset of these. Or, if you want to create one
+#'   large imputed datset from which multiple analyses with multiple outcomes
+#'   are derived.
+#'   
+#' @param mids mids objects that is filtered.
+#' @param var a string indicating the variable in the dataset for which missing
+#'     values are removed.
+#'
+#' @return a mids object filtered for observed cases of var
+#' 
+#' @examples
+#' \dontrun{
+#' remove_missing_from_mids(mids = imputed_data, var = "var_with_missing_value")
+#' }
+#' 
+#' @importFrom mice filter
+#'
+#' @export
+#'
+#' @author Till D. Best
+remove_missing_from_mids <- function(mids, var) {
+  # assert that inputed is as expected
+  assertive.types::assert_is_all_of(x = mids, classes = "mids")
+  assertive.types::assert_is_character(var)
+  
+  # calculate a logical vector indicating cases with missing var
+    miss_matrix <- is.na(mids$data[var])
+    
+    any_miss <- miss_matrix[, 1]
+    
+    for (i in seq(ncol(miss_matrix))) {
+      any_miss <- any_miss | miss_matrix[, i]
+      }
+  
+  # filter mids object for cases where var is not missing
+  mids_filtered <- mice::filter(mids, !any_miss)
+  # message the number of cases that have a missing outcome
+  message(sprintf("%s missing case(s) in [%s] found and removed.\n",
+                  sum(any_miss),
+                  paste(var, collapse = ", ")))
+  
+  return(mids_filtered)
 }
