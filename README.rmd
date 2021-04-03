@@ -14,25 +14,22 @@ knitr::opts_chunk$set(
 
 # dumb 
 
-**D**ata analysis **U**tilities for **M**edicine and **B**iostatistics (by Marquardt and Best)
+**B**iomedical **A**pplications of **S**tatistical **E**valuation - **C**oding **A**ssets by **M**arquardt and **B**est
 
 ## Overview
 
-dumb is a collection of utilities for streamlined data analysis including multiple imputation and model fitting.
+basecamp is a collection of utilities for streamlined data analysis including multiple imputation and model fitting.
 
 ## Installation
 
-dumb is under heavy development. There is no packaged version on CRAN or elsewhere (yet).
-The only way to get dumb is to fork the repository and create a local copy on your machine. You can then source the functions.
+basecamp is under heavy development. There is no packaged version on CRAN.
+However, you can install the development version:
 
-## Cheatsheet
-
-Not available, yet.
-  
-## Usage
-
-tbd  
+```{r, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("codeblue-team/basecamb")
+```
 
 ## Lifecycle
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-heavy_development-red.svg)]
+![lifecycle](https://img.shields.io/badge/lifecycle-heavy_development-red.svg)
