@@ -1,6 +1,6 @@
-Package: dumb
+Package: basecamb
 Type: Package
-Title: Data analysis Utilities by Marquardt and Best
+Title: Biomedical Applications of Statistical Evaluation - Coding Assets by Marquardt and Best
 Version: 0.0.1
 Authors@R: 
   c(person(given = "J. Peter",
@@ -15,7 +15,7 @@ Authors@R:
 Maintainer: Till D. Best <till-best@gmx.de>
 Description: Miscellaneous utility functions for data analysis workflows in a biostatistics context.
 Depends: R (>= 4.0.0)
-Imports: assertive.types, mice, Hmisc, readr
+Imports: assertive.types, mice, Hmisc
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

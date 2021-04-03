@@ -4,12 +4,12 @@
 \alias{assign_types_names}
 \title{Assign tidy types and names to a data.frame}
 \usage{
-assign_types_names(data, meta_csv_path)
+assign_types_names(data, meta_data)
 }
 \arguments{
 \item{data}{data.frame to be tidied. Dates must already be of type date}
 
-\item{meta_csv_path}{character path to csv with column names and datatypes. Has columns
+\item{meta_data}{data.frame specifying old and new column names and datatypes of data. Has columns
 * old_column_name : character with the old column name
 * new_data_type : character denoting the tidy data type. Supported types are:
   * character
@@ -29,5 +29,5 @@ Uses a .csv file for assignments to encourage a data dictionary based workflow.
 Requires 'Date' type columns to already be read in as Date.
 }
 \author{
-J. Peter Marqurdt
+J. Peter Marquardt
 }

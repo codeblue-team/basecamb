@@ -5,7 +5,7 @@
 #' Requires 'Date' type columns to already be read in as Date.
 #'
 #' @param data data.frame to be tidied. Dates must already be of type date
-#' @param meta_csv_path character path to csv with column names and datatypes. Has columns
+#' @param meta_data data.frame specifying old and new column names and datatypes of data. Has columns
 #' * old_column_name : character with the old column name
 #' * new_data_type : character denoting the tidy data type. Supported types are:
 #'   * character
@@ -20,20 +20,14 @@
 #'
 #' @export
 #'
-#' @importFrom readr read_csv
-#'
-#' @author J. Peter Marqurdt
-assign_types_names <- function(data, meta_csv_path) {
+#' @author J. Peter Marquardt
+assign_types_names <- function(data, meta_data) {
 
   assertive.types::assert_is_data.frame(data)
-
-  # reading in metadata
-  meta <- readr::read_csv(meta_csv_path,
-                          na = c(NA, "NA", ".", "#N/A")
-                          )
+  assertive.types::assert_is_data.frame(meta_data)
 
   # filtering out unused columns
-  data_to_use <- meta[!is.na(meta$new_data_type),
+  data_to_use <- meta_data[!is.na(meta_data$new_data_type),
                       c("old_column_name", "new_data_type", "new_column_name")
                       ]
   filtered_data <- data[, data_to_use$old_column_name]
@@ -68,11 +62,9 @@ assign_types_names <- function(data, meta_csv_path) {
         as.Date(filtered_data[[data_to_use$new_column_name[i]]])
     }
     else {
-      warning(paste0('Type ',
+      warning(sprintf('Type %s not recognized for column %s. Type remains %s.',
                      as.character(data_to_use$new_data_type[i]),
-                     'not recognized for column ',
                      as.character(data_to_use$old_column_name[i]),
-                     '.  \nType remains ',
                      as.character(typeof(filtered_data[data_to_use$new_column_name[i]]))
                      )
               )
