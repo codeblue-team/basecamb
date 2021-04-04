@@ -10,10 +10,12 @@ deconstruct_formula(formula)
 \item{formula}{formula object for use in statistical models}
 }
 \value{
-a named list with fields
-* outcome (character)
-* predictors (vector of characters)
-* censor_event (character) (optional) censor event, only for formulas including a Surv() object
+a named list with fields:
+\itemize{
+\item outcome (character)
+\item predictors (vector of characters)
+\item censor_event (character) (optional) censor event, only for formulas including a Surv() object
+}
 }
 \description{
 Deconstruct a formula object into strings of its components

@@ -3,8 +3,10 @@
 #' Build formula used in statistical models from vectors of strings
 #'
 #' @param outcome character denoting the column with the outcome
-#' @param predictors vector of characters denoting the columns with the predictors
-#' @param censor_event character denoting the column with the censoring event, for use in Survival-type models
+#' @param predictors vector of characters denoting the columns with the
+#'   predictors
+#' @param censor_event character denoting the column with the censoring event,
+#'   for use in Survival-type models
 #'
 #' @return formula for use in statistical models
 #'
@@ -52,7 +54,8 @@ build_model_formula <- function(outcome, predictors, censor_event=NULL) {
 #'
 #' @param formula formula object for use in statistical models
 #'
-#' @return a named list with fields
+#' @return a named list with fields:
+#'
 #' * outcome (character)
 #' * predictors (vector of characters)
 #' * censor_event (character) (optional) censor event, only for formulas including a Surv() object

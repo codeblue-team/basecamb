@@ -10,15 +10,19 @@ assign_types_names(data, meta_data)
 \item{data}{data.frame to be tidied. Dates must already be of type date}
 
 \item{meta_data}{data.frame specifying old and new column names and datatypes of data. Has columns
-* old_column_name : character with the old column name
-* new_data_type : character denoting the tidy data type. Supported types are:
-  * character
-  * integer
-  * float
-  * factor
-  * date (can only confirm correct datatype assignment, not coerce other types into date)
-* new_column_name : tidy column name. Can be left blank to keep the old column name
-* Optional other columns (do not affect behaviour)}
+\itemize{
+\item old_column_name : character with the old column name
+\item new_data_type : character denoting the tidy data type. Supported types are:
+\itemize{
+\item character
+\item integer
+\item float
+\item factor
+\item date (can only confirm correct datatype assignment, not coerce other types into date)
+}
+\item new_column_name : tidy column name. Can be left blank to keep the old column name
+\item Optional other columns (do not affect behaviour)
+}}
 }
 \value{
 clean data.frame

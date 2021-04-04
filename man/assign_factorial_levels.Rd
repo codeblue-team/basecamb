@@ -10,11 +10,15 @@ assign_factorial_levels(data, factor_keys_values)
 \item{data}{data.frame to modify}
 
 \item{factor_keys_values}{named list with:
-* Keys: Names of factor columns
-* values: Named vectors with
-   * keys: current value (string representation)
-   * values: new value to be assigned
-   * if a 'default' key is passed, all values not conforming to the new scheme will be converted to the 'default' value}
+\itemize{
+\item Keys: Names of factor columns
+\item values: Named vectors with
+\itemize{
+\item keys: current value (string representation)
+\item values: new value to be assigned
+\item if a 'default' key is passed, all values not conforming to the new scheme will be converted to the 'default' value
+}
+}}
 }
 \value{
 data frame with new levels

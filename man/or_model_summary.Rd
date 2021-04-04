@@ -31,21 +31,21 @@ decimals, it will be rounded to the nearest integer.}
 }
 \value{
 a dataframe with the adjusted odds ratio, confidence intervals and
-  p-values.
+p-values.
 }
 \description{
 This function summarises regression models that return data on the log-odds
-  scale and returns a dataframe with estimates, and confidence intervals as
-  odds ratios. P value are also provided.
-  There's also the option to remove intercepts. This comes in handy when you
-  fit proportional odds ordinal logistic regression models which usually
-  result in many intercepts that are not really of interest.
-  This function also works with models obtained from multiply imputed
-  datasets, for example fitted with Hmisc::fit.mult.impute().
+scale and returns a dataframe with estimates, and confidence intervals as
+odds ratios. P value are also provided.
+There's also the option to remove intercepts. This comes in handy when you
+fit proportional odds ordinal logistic regression models which usually
+result in many intercepts that are not really of interest.
+This function also works with models obtained from multiply imputed
+datasets, for example fitted with Hmisc::fit.mult.impute().
 }
 \details{
-CAVE! The function does not check whether you're estimates are on the
-  log-odds scale. It 'only' performs the transformation!
+CAVE! The function does not check whether your estimates are on the
+log-odds scale. It will do the transformation no matter what!
 }
 \examples{
 \dontrun{

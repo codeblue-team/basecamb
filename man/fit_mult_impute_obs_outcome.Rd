@@ -12,17 +12,17 @@ fit_mult_impute_obs_outcome(mids, formula, fitter, ...)
 \item{formula}{a formula object that describes the model to be fit}
 
 \item{fitter}{the fitter (i.e. the type of model) used by
-Hmisc::fit.mult.impute to fit the model.}
+Hmisc::fit.mult.impute() to fit the model.}
 
-\item{...}{any other arguments to Hmisc::fit.mult.impute()}
+\item{...}{any other arguments to Hmisc::fit.mult.impute().}
 }
 \value{
 mod a fit.mult.impute object
 }
 \description{
 This function fits a regression model using Hmisc::fit.mult.impute() on a
-  multiply imputed dataset generated with mice::mice(). Cases with a
-  missing outcome are removed from the dataset before model fitting.
+multiply imputed dataset generated with mice::mice(). Cases with a
+missing outcome are removed from the dataset before model fitting.
 }
 \examples{
 \dontrun{

@@ -9,12 +9,12 @@
 #'   This function also works with models obtained from multiply imputed
 #'   datasets, for example fitted with Hmisc::fit.mult.impute().
 #'
-#' CAVE! The function does not check whether you're estimates are on the
-#'   log-odds scale. It 'only' performs the transformation!
+#' CAVE! The function does not check whether your estimates are on the
+#'   log-odds scale. It will do the transformation no matter what!
 #'
 #' @param model a model object with estimates on the log-odds scale.
 #' @param conf_int a numeric used to calculate the confidence intervals. The
-#'   default of 1.96 gives the 95\% confidence interval.
+#'   default of 1.96 gives the 95% confidence interval.
 #' @param print_intercept a logical flag indicating whether intercepts shall
 #'   be removed. Intercept removing is done with a regular expression matching
 #'   "y>=". If you have a variable matching this pattern it will also be removed!

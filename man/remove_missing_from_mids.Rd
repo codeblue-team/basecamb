@@ -9,19 +9,19 @@ remove_missing_from_mids(mids, var)
 \arguments{
 \item{mids}{mids objects that is filtered.}
 
-\item{var}{a string indicating the variable in the dataset for which missing
-values are removed.}
+\item{var}{a string or vector of strings specifying the variable(s) for which
+missing cases are removed.}
 }
 \value{
 a mids object filtered for observed cases of var
 }
 \description{
 remove_missing_from_mids is used to filter a mids object for missing cases
-  in the original dataset in the variable var. This is useful for situations
-  where you want to use as many observations as possible for imputation but
-  only fit your model on a subset of these. Or, if you want to create one
-  large imputed datset from which multiple analyses with multiple outcomes
-  are derived.
+in the original dataset in the variable var. This is useful for situations
+where you want to use as many observations as possible for imputation but
+only fit your model on a subset of these. Or, if you want to create one
+large imputed datset from which multiple analyses with multiple outcomes
+are derived.
 }
 \examples{
 \dontrun{

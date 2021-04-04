@@ -9,9 +9,11 @@ build_model_formula(outcome, predictors, censor_event = NULL)
 \arguments{
 \item{outcome}{character denoting the column with the outcome}
 
-\item{predictors}{vector of characters denoting the columns with the predictors}
+\item{predictors}{vector of characters denoting the columns with the
+predictors}
 
-\item{censor_event}{character denoting the column with the censoring event, for use in Survival-type models}
+\item{censor_event}{character denoting the column with the censoring event,
+for use in Survival-type models}
 }
 \value{
 formula for use in statistical models

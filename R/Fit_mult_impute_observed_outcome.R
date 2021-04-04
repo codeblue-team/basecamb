@@ -7,8 +7,8 @@
 #' @param mids a mids object, i.e. the imputed dataset
 #' @param formula a formula object that describes the model to be fit
 #' @param fitter the fitter (i.e. the type of model) used by
-#'   Hmisc::fit.mult.impute to fit the model.
-#' @param ... any other arguments to Hmisc::fit.mult.impute()
+#'   Hmisc::fit.mult.impute() to fit the model.
+#' @param ... any other arguments to Hmisc::fit.mult.impute().
 #'
 #' @return mod a fit.mult.impute object
 #'
@@ -58,8 +58,8 @@ fit_mult_impute_obs_outcome <- function(mids,
 #'   are derived.
 #'
 #' @param mids mids objects that is filtered.
-#' @param var a string indicating the variable in the dataset for which missing
-#'     values are removed.
+#' @param var a string or vector of strings specifying the variable(s) for which
+#'   missing cases are removed.
 #'
 #' @return a mids object filtered for observed cases of var
 #'
