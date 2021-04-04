@@ -7,26 +7,32 @@
 assign_types_names(data, meta_data)
 }
 \arguments{
-\item{data}{data.frame to be tidied. Dates must already be of type date}
+\item{data}{data.frame to be tidied. Dates must already be of type date.}
 
-\item{meta_data}{data.frame specifying old and new column names and datatypes of data. Has columns
-* old_column_name : character with the old column name
-* new_data_type : character denoting the tidy data type. Supported types are:
-  * character
-  * integer
-  * float
-  * factor
-  * date (can only confirm correct datatype assignment, not coerce other types into date)
-* new_column_name : tidy column name. Can be left blank to keep the old column name
-* Optional other columns (do not affect behaviour)}
+\item{meta_data}{data.frame specifying old column names, new column names and
+datatypes of data. Has the following columns:
+\itemize{
+\item old_column_name : character with the old column name.
+\item new_data_type : character denoting the tidy data type. Supported types are:
+\itemize{
+\item character (will be coerced using \code{as.character()}).
+\item integer (will be coerced using \code{as.integer()}).
+\item float (will be coerced using \code{as.double()}).
+\item factor (will be coerced using \code{as.factor()}).
+\item date (can only confirm correct datatype assignment, not coerce other types into date. Uses \code{as.Date()}).
+}
+\item new_column_name : tidy column name. Can be left blank to keep the old column name.
+\item Optional other columns (do not affect behavior).
+}}
 }
 \value{
 clean data.frame
 }
 \description{
-Verbosely assign tidy name and data type for each column of a data.frame and get rid of superfluous columns
-Uses a .csv file for assignments to encourage a data dictionary based workflow.
-Requires 'Date' type columns to already be read in as Date.
+Verbosely assign tidy name and data type for each column of a data.frame and
+get rid of superfluous columns. Uses a .csv file for assignments to
+encourage a data dictionary based workflow.
+CAVE! Requires 'Date' type columns to already be read in as Date.
 }
 \author{
 J. Peter Marquardt

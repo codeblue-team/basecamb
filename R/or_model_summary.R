@@ -1,28 +1,27 @@
-#' Summarise a logistic/ordinal regression model on the odds ratio scal in a dataframe
+#' Summarise a logistic regression model on the odds ratio scale
 #'
 #' This function summarises regression models that return data on the log-odds
 #'   scale and returns a dataframe with estimates, and confidence intervals as
 #'   odds ratios. P value are also provided.
-#'   There's also the option to remove intercepts. This comes in handy when you
-#'   fit proportional odds ordinal logistic regression models which usually
-#'   result in many intercepts that are not really of interest.
-#'   This function also works with models obtained from multiply imputed
-#'   datasets, for example fitted with Hmisc::fit.mult.impute().
+#'   Additionally, intercepts can be removed from the summary. This comes in
+#'   handy when ordinal logistic regression models are fit. Ordinal regression
+#'   models (such as proportional odds models) usually result in many intercepts
+#'   that are not really of interest.
+#'   This function is also compatible with models obtained from multiply imputed
+#'   datasets, for example models fitted with `Hmisc::fit.mult.impute()`.
 #'
-#' CAVE! The function does not check whether you're estimates are on the
-#'   log-odds scale. It 'only' performs the transformation!
+#' CAVE! The function does not check whether your estimates are on the
+#'   log-odds scale. It will do the transformation no matter what!
 #'
 #' @param model a model object with estimates on the log-odds scale.
 #' @param conf_int a numeric used to calculate the confidence intervals. The
 #'   default of 1.96 gives the 95% confidence interval.
 #' @param print_intercept a logical flag indicating whether intercepts shall
-#'   be removed. Intercept removing is done with a regular expression matching
-#'   "y>=". If you have a variable matching this pattern it will also be removed!
-#' @param round_est the number of decimals provided for estimates (odds ratios)
-#'   and confidence intervals. If the input has decimals, it will be
-#'   rounded to the nearest integer.
-#' @param round_p the number of decimals provided for p-values. If the input has
-#'   decimals, it will be rounded to the nearest integer.
+#'   be removed. All variables that start with "y>=" will be removed. If there
+#'   is a variable matching this pattern, it will also be removed!
+#' @param round_est the number of decimals returned for estimates (odds ratios)
+#'   and confidence intervals.
+#' @param round_p the number of decimals provided for p-values.
 #'
 #' @return a dataframe with the adjusted odds ratio, confidence intervals and
 #'   p-values.
@@ -36,6 +35,8 @@
 #' @importFrom assertive.types assert_is_a_number
 #' @importFrom assertive.types assert_is_a_bool
 #' @importFrom assertive.types assert_is_numeric
+#' @importFrom stats pnorm
+#' @importFrom stats vcov
 #'
 #' @export
 #'
@@ -54,7 +55,7 @@ or_model_summary <- function(model,
 
   # There's different ways of getting the variance of a model object depending
   #   on its class.
-  #   Here we've decided to support glm and rms objects (which includes orm and
+  #   Here we've decided to support glm and rms objects (including orm and
   #   lrm objects).
 
   # calculate adjusted odds ratio
