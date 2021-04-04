@@ -14,7 +14,7 @@
 #'
 #' @param model a model object with estimates on the log-odds scale.
 #' @param conf_int a numeric used to calculate the confidence intervals. The
-#'   default of 1.96 gives the 95% confidence interval.
+#'   default of 1.96 gives the 95\% confidence interval.
 #' @param print_intercept a logical flag indicating whether intercepts shall
 #'   be removed. Intercept removing is done with a regular expression matching
 #'   "y>=". If you have a variable matching this pattern it will also be removed!
@@ -36,6 +36,8 @@
 #' @importFrom assertive.types assert_is_a_number
 #' @importFrom assertive.types assert_is_a_bool
 #' @importFrom assertive.types assert_is_numeric
+#' @importFrom stats pnorm
+#' @importFrom stats vcov
 #'
 #' @export
 #'

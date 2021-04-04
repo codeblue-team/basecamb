@@ -26,7 +26,7 @@ This function fits a regression model using Hmisc::fit.mult.impute() on a
 }
 \examples{
 \dontrun{
-fit_mult_impute_obs_outcome(mids = imputed_data, formula = "y ~ x1 + x2", fitter = orm)
+fit_mult_impute_obs_outcome(mids = imputed_data, formula = "y ~ x1 + x2", fitter = rms::orm)
 }
 
 }
