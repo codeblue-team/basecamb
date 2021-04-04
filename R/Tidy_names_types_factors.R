@@ -124,3 +124,114 @@ assign_factorial_levels <- function(data, factor_keys_values) {
   }
   return(data)
 }
+
+
+#' Parse a string to create a named list
+#'
+#' Create a named list from a standardised string of the follwoing format:
+#'   * key-value pairs are separated from other key-value-pairs by a comma (",")
+#'   * key and value of the same pair are separated by an equal sign ("=")
+#'   * quotations around individual keys and values are recommended for clarity, but do not affect functionality.
+#'   * all values will be coerced to type character, with the exception of "NA", "TRUE" and "FALSE"
+#'
+#' @param str character with standardised pattern to be parsed
+#'
+#' @return named vector
+#'
+#' @examples
+#' .parse_string_to_named_vector("'key1' = 'val1', 'key2' = 'val2'")
+#' .parse_string_to_named_vector("'key1' = 'val1', 'key2' = 'val2', 'default' = 'NA'")
+#'
+#' @importFrom assertive.types assert_is_character
+#'
+#' @author J. Peter Marquardt
+.parse_string_to_named_vector <- function(str) {
+
+  assertive.types::assert_is_character(str)
+
+  key_value_pairs <- strsplit(gsub("\"|\'| ", '', str), split = ",")[[1]]
+
+  vct <- vector()
+  for (kvp in key_value_pairs) {
+    if(strsplit(kvp, split = "=")[[1]][2] == "NA") {
+      vct[strsplit(kvp, split = "=")[[1]][1]] <- NA
+    }
+    else if(strsplit(kvp, split = "=")[[1]][2] == "TRUE") {
+      vct[strsplit(kvp, split = "=")[[1]][1]] <- TRUE
+    }
+    else if(strsplit(kvp, split = "=")[[1]][2] == "FALSE") {
+      vct[strsplit(kvp, split = "=")[[1]][1]] <- FALSE
+    }
+    else{
+      vct[strsplit(kvp, split = "=")[[1]][1]] <- strsplit(kvp, split = "=")[[1]][2]
+    }
+  }
+
+  return(vct)
+}
+
+
+#' Clean column names, types and levels
+#'
+#' Use a data dictionary data.frame to apply the follwowing tidying steps to your data.frame:
+#'   * Remove superfluous columns
+#'   * Rename columns
+#'   * Ensure/coerce correct data type for each column
+#'   * Assign factorial levels, including renaming and grouping
+#'
+#' @param data data.frame to be cleaned
+#' @param data_dictionary data.frame with the following columns:
+#' * old_column_name : character with the old column name
+#' * new_data_type : character denoting the tidy data type. Supported types are:
+#'   * character
+#'   * integer
+#'   * float
+#'   * factor
+#'   * date (can only confirm correct datatype assignment, not coerce other types into date)
+#' * new_column_name : tidy column name. Can be left blank to keep the old column name
+#' * coding (factor columns only) : character denoting old value (key) and new value (value) in a standardised fashion:
+#'   * key-value pairs are separated from other key-value-pairs by a comma (",")
+#'   * key and value of the same pair are separated by an equal sign ("=")
+#'   * quotations around individual keys and values are recommended for clarity, but do not affect functionality.
+#'   * all values will be coerced to type character, with the exception of "NA" being parsed as type NA
+#'   * using "default" as a key will assign the specified value to all current values that do not match any of the specified keys, including NA
+#'   * example coding: "'key1' = 'val1', 'key2' = 'val2', 'default' = NA"
+#'   * if no coding is specified for a column, the coding remains unchanged
+#' * Optional other columns (do not affect behaviour)
+#'
+#' @return clean data.frame
+#'
+#' @importFrom assertive.types assert_is_character
+#'
+#' @export
+#'
+#' @author J. Peter Marquardt
+apply_data_dictionary <- function(data, data_dictionary) {
+
+  assertive.types::is_data.frame(data)
+  assertive.types::is_data.frame(data_dictionary)
+
+  # assign correct data types and new column names
+  data <- assign_types_names(data = data, meta_data = data_dictionary)
+
+  # factor columns only: Assign updated factor levels
+  fact_cols_only <- data_dictionary[data_dictionary[["new_data_type"]] == "factor" & !is.na(data_dictionary[["new_data_type"]]), ]
+
+  fact_coding_list <- list()
+  for (i in seq(1, nrow(fact_cols_only))) {
+
+    if(is.na(fact_cols_only[[i, "coding"]])) {  # skip columns without specified coding
+      next
+    }
+
+    col_name <- ifelse(!is.na(fact_cols_only[[i, "new_column_name"]]),
+                       fact_cols_only[[i, "new_column_name"]],
+                       fact_cols_only[[i, "old_column_name"]])
+
+    fact_coding_list[[col_name]] <- .parse_string_to_named_vector(fact_cols_only[[i, "coding"]])
+  }
+
+  data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list)
+
+  return(data)
+}
