@@ -1,13 +1,14 @@
-#' Summarise a logistic/ordinal regression model on the odds ratio scal in a dataframe
+#' Summarise a logistic regression model on the odds ratio scale
 #'
 #' This function summarises regression models that return data on the log-odds
 #'   scale and returns a dataframe with estimates, and confidence intervals as
 #'   odds ratios. P value are also provided.
-#'   There's also the option to remove intercepts. This comes in handy when you
-#'   fit proportional odds ordinal logistic regression models which usually
-#'   result in many intercepts that are not really of interest.
-#'   This function also works with models obtained from multiply imputed
-#'   datasets, for example fitted with Hmisc::fit.mult.impute().
+#'   Additionally, intercepts can be removed from the summary. This comes in
+#'   handy when ordinal logistic regression models are fit. Ordinal regression
+#'   models (such as proportional odds models) usually result in many intercepts
+#'   that are not really of interest.
+#'   This function is also compatible with models obtained from multiply imputed
+#'   datasets, for example models fitted with Hmisc::fit.mult.impute().
 #'
 #' CAVE! The function does not check whether your estimates are on the
 #'   log-odds scale. It will do the transformation no matter what!
@@ -56,7 +57,7 @@ or_model_summary <- function(model,
 
   # There's different ways of getting the variance of a model object depending
   #   on its class.
-  #   Here we've decided to support glm and rms objects (which includes orm and
+  #   Here we've decided to support glm and rms objects (including orm and
   #   lrm objects).
 
   # calculate adjusted odds ratio
