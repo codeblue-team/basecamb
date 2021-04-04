@@ -1,20 +1,22 @@
 #' Assign tidy types and names to a data.frame
 #'
-#' Verbosely assign tidy name and data type for each column of a data.frame and get rid of superfluous columns
-#' Uses a .csv file for assignments to encourage a data dictionary based workflow.
-#' Requires 'Date' type columns to already be read in as Date.
+#' Verbosely assign tidy name and data type for each column of a data.frame and
+#'   get rid of superfluous columns. Uses a .csv file for assignments to
+#'   encourage a data dictionary based workflow.
+#'   CAVE! Requires 'Date' type columns to already be read in as Date.
 #'
-#' @param data data.frame to be tidied. Dates must already be of type date
-#' @param meta_data data.frame specifying old and new column names and datatypes of data. Has columns
-#' * old_column_name : character with the old column name
+#' @param data data.frame to be tidied. Dates must already be of type date.
+#' @param meta_data data.frame specifying old column names, new column names and
+#'   datatypes of data. Has the following columns:
+#' * old_column_name : character with the old column name.
 #' * new_data_type : character denoting the tidy data type. Supported types are:
-#'   * character
-#'   * integer
-#'   * float
-#'   * factor
-#'   * date (can only confirm correct datatype assignment, not coerce other types into date)
-#' * new_column_name : tidy column name. Can be left blank to keep the old column name
-#' * Optional other columns (do not affect behaviour)
+#'   * character (will be coerced using `as.character()`).
+#'   * integer (will be coerced using `as.integer()`).
+#'   * float (will be coerced using `as.double()`).
+#'   * factor (will be coerced using `as.factor()`).
+#'   * date (can only confirm correct datatype assignment, not coerce other types into date. Uses `as.Date()`).
+#' * new_column_name : tidy column name. Can be left blank to keep the old column name.
+#' * Optional other columns (do not affect behavior).
 #'
 #' @return clean data.frame
 #'
