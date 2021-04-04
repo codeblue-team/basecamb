@@ -8,7 +8,7 @@
 #'   models (such as proportional odds models) usually result in many intercepts
 #'   that are not really of interest.
 #'   This function is also compatible with models obtained from multiply imputed
-#'   datasets, for example models fitted with Hmisc::fit.mult.impute().
+#'   datasets, for example models fitted with `Hmisc::fit.mult.impute()`.
 #'
 #' CAVE! The function does not check whether your estimates are on the
 #'   log-odds scale. It will do the transformation no matter what!
@@ -17,13 +17,11 @@
 #' @param conf_int a numeric used to calculate the confidence intervals. The
 #'   default of 1.96 gives the 95% confidence interval.
 #' @param print_intercept a logical flag indicating whether intercepts shall
-#'   be removed. Intercept removing is done with a regular expression matching
-#'   "y>=". If you have a variable matching this pattern it will also be removed!
-#' @param round_est the number of decimals provided for estimates (odds ratios)
-#'   and confidence intervals. If the input has decimals, it will be
-#'   rounded to the nearest integer.
-#' @param round_p the number of decimals provided for p-values. If the input has
-#'   decimals, it will be rounded to the nearest integer.
+#'   be removed. All variables that start with "y>=" will be removed. If there
+#'   is a variable matching this pattern, it will also be removed!
+#' @param round_est the number of decimals returned for estimates (odds ratios)
+#'   and confidence intervals.
+#' @param round_p the number of decimals provided for p-values.
 #'
 #' @return a dataframe with the adjusted odds ratio, confidence intervals and
 #'   p-values.

@@ -1,8 +1,8 @@
 #' Fit a model on multiply imputed data using only observatoin with non-missing
 #'   outcome(s)
 #'
-#' This function fits a regression model using Hmisc::fit.mult.impute() on a
-#'   multiply imputed dataset generated with mice::mice(). Cases with a
+#' This function fits a regression model using `Hmisc::fit.mult.impute()` on a
+#'   multiply imputed dataset generated with `mice::mice()`. Cases with a
 #'   missing outcome in the original dataset are removed from the mids object
 #'   before model fitting.
 #'
@@ -10,10 +10,10 @@
 #' @param formula a formula that describes the model to be fit. The outcome (y
 #'   variable) in the formula will be used to remove missing cases.
 #' @param fitter a modeling function (not in quotes) that is compatible with
-#'   Hmisc::fit.mult.impute(). For details see ?Hmisc::fit.mult.impute().
-#' @param ... additional arguments to Hmisc::fit.mult.impute().
+#'   `Hmisc::fit.mult.impute()`. For details see `?Hmisc::fit.mult.impute()`.
+#' @param ... additional arguments to `Hmisc::fit.mult.impute()`.
 #'
-#' @return mod a fit.mult.impute object as detailed in ?Hmisc::fit.mult.impute()
+#' @return mod a fit.mult.impute object as detailed in `?Hmisc::fit.mult.impute()`.
 #'
 #' @examples
 #' \dontrun{
