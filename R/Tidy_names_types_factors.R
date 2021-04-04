@@ -20,6 +20,9 @@
 #'
 #' @return clean data.frame
 #'
+#' @importFrom assertive.types assert_is_data.frame
+#' @importFrom assertive.types assert_is_data.frame
+#'
 #' @export
 #'
 #' @author J. Peter Marquardt

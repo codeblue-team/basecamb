@@ -20,6 +20,8 @@
 #' fit_mult_impute_obs_outcome(mids = imputed_data, formula = "y ~ x1 + x2", fitter = rms::orm)
 #' }
 #'
+#' @importFrom assertive.types assert_is_all_of
+#' @importFrom assertive.types assert_is_formula
 #' @importFrom Hmisc fit.mult.impute
 #' @importFrom stats formula
 #'
@@ -75,7 +77,7 @@ fit_mult_impute_obs_outcome <- function(mids,
 #'
 #' @importFrom mice filter
 #' @importFrom assertive.types assert_is_all_of
-#' @importFrom assertive.typesassert_is_character
+#' @importFrom assertive.types assert_is_character
 #'
 #' @export
 #'

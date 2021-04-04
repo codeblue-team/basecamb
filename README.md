@@ -1,6 +1,3 @@
----
-output: github_document
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -12,7 +9,6 @@ output: github_document
 ![lifecycle](https://img.shields.io/badge/license-GPL_3-blue.svg)
 ![lifecycle](https://img.shields.io/badge/lifecycle-development-red.svg)
 
-
 ## Overview
 
 basecamp is a collection of utilities for streamlined data analysis
@@ -20,8 +16,8 @@ including multiple imputation and model fitting.
 
 ## Installation
 
-basecamp is under active development. You can install either from CRAN or get
-the current development version from GitHub.
+basecamp is under active development. You can install either from CRAN
+or get the current development version from GitHub.
 
 ``` r
 install.packages("basecamb")

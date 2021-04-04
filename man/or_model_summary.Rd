@@ -2,7 +2,7 @@
 % Please edit documentation in R/or_model_summary.R
 \name{or_model_summary}
 \alias{or_model_summary}
-\title{Summarise a logistic/ordinal regression model on the odds ratio scal in a dataframe}
+\title{Summarise a logistic regression model on the odds ratio scale}
 \usage{
 or_model_summary(
   model,
@@ -19,15 +19,13 @@ or_model_summary(
 default of 1.96 gives the 95\% confidence interval.}
 
 \item{print_intercept}{a logical flag indicating whether intercepts shall
-be removed. Intercept removing is done with a regular expression matching
-"y>=". If you have a variable matching this pattern it will also be removed!}
+be removed. All variables that start with "y>=" will be removed. If there
+is a variable matching this pattern, it will also be removed!}
 
-\item{round_est}{the number of decimals provided for estimates (odds ratios)
-and confidence intervals. If the input has decimals, it will be
-rounded to the nearest integer.}
+\item{round_est}{the number of decimals returned for estimates (odds ratios)
+and confidence intervals.}
 
-\item{round_p}{the number of decimals provided for p-values. If the input has
-decimals, it will be rounded to the nearest integer.}
+\item{round_p}{the number of decimals provided for p-values.}
 }
 \value{
 a dataframe with the adjusted odds ratio, confidence intervals and
@@ -37,11 +35,12 @@ p-values.
 This function summarises regression models that return data on the log-odds
 scale and returns a dataframe with estimates, and confidence intervals as
 odds ratios. P value are also provided.
-There's also the option to remove intercepts. This comes in handy when you
-fit proportional odds ordinal logistic regression models which usually
-result in many intercepts that are not really of interest.
-This function also works with models obtained from multiply imputed
-datasets, for example fitted with Hmisc::fit.mult.impute().
+Additionally, intercepts can be removed from the summary. This comes in
+handy when ordinal logistic regression models are fit. Ordinal regression
+models (such as proportional odds models) usually result in many intercepts
+that are not really of interest.
+This function is also compatible with models obtained from multiply imputed
+datasets, for example models fitted with \code{Hmisc::fit.mult.impute()}.
 }
 \details{
 CAVE! The function does not check whether your estimates are on the

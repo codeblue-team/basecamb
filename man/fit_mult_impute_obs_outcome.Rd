@@ -2,27 +2,30 @@
 % Please edit documentation in R/Fit_mult_impute_observed_outcome.R
 \name{fit_mult_impute_obs_outcome}
 \alias{fit_mult_impute_obs_outcome}
-\title{Fit a model on multiply imputed data using only non-missing outcomes}
+\title{Fit a model on multiply imputed data using only observatoin with non-missing
+outcome(s)}
 \usage{
 fit_mult_impute_obs_outcome(mids, formula, fitter, ...)
 }
 \arguments{
-\item{mids}{a mids object, i.e. the imputed dataset}
+\item{mids}{a mids object, i.e. the imputed dataset.}
 
-\item{formula}{a formula object that describes the model to be fit}
+\item{formula}{a formula that describes the model to be fit. The outcome (y
+variable) in the formula will be used to remove missing cases.}
 
-\item{fitter}{the fitter (i.e. the type of model) used by
-Hmisc::fit.mult.impute() to fit the model.}
+\item{fitter}{a modeling function (not in quotes) that is compatible with
+\code{Hmisc::fit.mult.impute()}. For details see \code{?Hmisc::fit.mult.impute()}.}
 
-\item{...}{any other arguments to Hmisc::fit.mult.impute().}
+\item{...}{additional arguments to \code{Hmisc::fit.mult.impute()}.}
 }
 \value{
-mod a fit.mult.impute object
+mod a fit.mult.impute object as detailed in \code{?Hmisc::fit.mult.impute()}.
 }
 \description{
-This function fits a regression model using Hmisc::fit.mult.impute() on a
-multiply imputed dataset generated with mice::mice(). Cases with a
-missing outcome are removed from the dataset before model fitting.
+This function fits a regression model using \code{Hmisc::fit.mult.impute()} on a
+multiply imputed dataset generated with \code{mice::mice()}. Cases with a
+missing outcome in the original dataset are removed from the mids object
+before model fitting.
 }
 \examples{
 \dontrun{

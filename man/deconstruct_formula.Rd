@@ -7,7 +7,7 @@
 deconstruct_formula(formula)
 }
 \arguments{
-\item{formula}{formula object for use in statistical models}
+\item{formula}{formula object for use in statistical models.}
 }
 \value{
 a named list with fields:
@@ -18,7 +18,8 @@ a named list with fields:
 }
 }
 \description{
-Deconstruct a formula object into strings of its components
+Deconstruct a formula object into strings of its components. Predictors are
+split by '+', so interaction terms will be returned as a single string.
 }
 \examples{
 \dontrun{
