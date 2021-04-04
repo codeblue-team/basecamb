@@ -13,6 +13,8 @@
 #' @importFrom mice as.mids
 #' @importFrom mice complete
 #'
+#' @export
+#'
 #' @author J. Peter Marquardt
 apply_function_to_imputed_data <- function(mice_data, fun) {
   assertive.types::assert_is_all_of(x = mice_data, classes = "mids")
