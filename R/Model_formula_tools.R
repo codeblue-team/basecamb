@@ -1,12 +1,12 @@
 #' Build formula for statistical models
 #'
-#' Build formula used in statistical models from vectors of strings
+#' Build formula used in statistical models from vectors of strings.
 #'
-#' @param outcome character denoting the column with the outcome
+#' @param outcome character denoting the column with the outcome.
 #' @param predictors vector of characters denoting the columns with the
-#'   predictors
+#'   predictors.
 #' @param censor_event character denoting the column with the censoring event,
-#'   for use in Survival-type models
+#'   for use in Survival-type models.
 #'
 #' @return formula for use in statistical models
 #'
@@ -50,9 +50,10 @@ build_model_formula <- function(outcome, predictors, censor_event=NULL) {
 
 #' Deconstruct formula
 #'
-#' Deconstruct a formula object into strings of its components
+#' Deconstruct a formula object into strings of its components. Predictors are
+#'   split by '+', so interaction terms will be returned as a single string.
 #'
-#' @param formula formula object for use in statistical models
+#' @param formula formula object for use in statistical models.
 #'
 #' @return a named list with fields:
 #'
@@ -73,6 +74,8 @@ build_model_formula <- function(outcome, predictors, censor_event=NULL) {
 #'
 #' @author J. Peter Marquardt
 deconstruct_formula <- function(formula){
+
+  assertive.types::assert_is_formula(formula)
 
   # deparsing formula into string with no spaces and newlines
   form_string <- gsub(' ', '', gsub('\n', '', deparse1(formula, collapse = '')))
@@ -97,5 +100,3 @@ deconstruct_formula <- function(formula){
 
   return(component_list)
 }
-
-
