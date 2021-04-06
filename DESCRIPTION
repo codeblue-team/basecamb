@@ -1,7 +1,7 @@
 Package: basecamb
 Type: Package
 Title: Biomedical Applications of Statistical Evaluation - Coding Assets by Marquardt and Best
-Version: 0.0.1
+Version: 0.9.0
 Authors@R: 
   c(person(given = "J. Peter",
            family = "Marquardt",
