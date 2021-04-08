@@ -23,12 +23,6 @@ only fit your model on a subset of these. Or, if you want to create one
 large imputed datset from which multiple analyses with multiple outcomes
 are derived.
 }
-\examples{
-\dontrun{
-remove_missing_from_mids(mids = imputed_data, var = "var_with_missing_value")
-}
-
-}
 \author{
 Till D. Best
 }

@@ -27,9 +27,10 @@
 #'   p-values.
 #'
 #' @examples
-#' \dontrun{
-#' fit_mult_impute_obs_outcome(mids = imputed_data, formula = "y ~ x1 + x2", fitter = orm)
-#' }
+#' # fit a logistic model
+#' mod <- glm(formula = am ~ mpg + cyl, data = mtcars, family = binomial())
+#'
+#' or_model_summary(model = mod)
 #'
 #' @importFrom assertive.types assert_is_any_of
 #' @importFrom assertive.types assert_is_a_number

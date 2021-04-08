@@ -21,11 +21,6 @@ Create a named list from a standardised string of the follwoing format:
 \item all values will be coerced to type character, with the exception of "NA", "TRUE" and "FALSE"
 }
 }
-\examples{
-basecamb:::.parse_string_to_named_vector("'key1' = 'val1', 'key2' = 'val2'")
-basecamb:::.parse_string_to_named_vector("'key1' = 'val1', 'key2' = 'val2', 'default' = 'NA'")
-
-}
 \author{
 J. Peter Marquardt
 }

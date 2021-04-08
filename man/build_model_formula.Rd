@@ -22,10 +22,8 @@ formula for use in statistical models
 Build formula used in statistical models from vectors of strings.
 }
 \examples{
-\dontrun{
-build_model_formula('outcome', c('pred_1', 'pred_2'))
-build_model_formula('outcome', c('pred_1', 'pred_2'), censor_event='cens_event')
-}
+build_model_formula("outcome", c("pred_1", "pred_2"))
+build_model_formula("outcome", c("pred_1", "pred_2"), censor_event = "cens_event")
 
 }
 \author{

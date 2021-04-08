@@ -47,9 +47,10 @@ CAVE! The function does not check whether your estimates are on the
 log-odds scale. It will do the transformation no matter what!
 }
 \examples{
-\dontrun{
-fit_mult_impute_obs_outcome(mids = imputed_data, formula = "y ~ x1 + x2", fitter = orm)
-}
+# fit a logistic model
+mod <- glm(formula = am ~ mpg + cyl, data = mtcars, family = binomial())
+
+or_model_summary(model = mod)
 
 }
 \author{

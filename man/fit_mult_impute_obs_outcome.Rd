@@ -14,12 +14,12 @@ fit_mult_impute_obs_outcome(mids, formula, fitter, ...)
 variable) in the formula will be used to remove missing cases.}
 
 \item{fitter}{a modeling function (not in quotes) that is compatible with
-\code{Hmisc::fit.mult.impute()}. For details see \code{?Hmisc::fit.mult.impute()}.}
+\code{Hmisc::fit.mult.impute()}.}
 
 \item{...}{additional arguments to \code{Hmisc::fit.mult.impute()}.}
 }
 \value{
-mod a fit.mult.impute object as detailed in \code{?Hmisc::fit.mult.impute()}.
+mod a fit.mult.impute object.
 }
 \description{
 This function fits a regression model using \code{Hmisc::fit.mult.impute()} on a
@@ -28,9 +28,10 @@ missing outcome in the original dataset are removed from the mids object
 before model fitting.
 }
 \examples{
-\dontrun{
-fit_mult_impute_obs_outcome(mids = imputed_data, formula = "y ~ x1 + x2", fitter = rms::orm)
-}
+# create an imputed dataset
+imputed_data <- mice::mice(airquality)
+
+fit_mult_impute_obs_outcome(mids = imputed_data, formula = Ozone ~ Solar.R + Wind, fitter = glm)
 
 }
 \author{

@@ -22,10 +22,8 @@ Deconstruct a formula object into strings of its components. Predictors are
 split by '+', so interaction terms will be returned as a single string.
 }
 \examples{
-\dontrun{
-deconstruct_formula(stats::as.formula('outcome ~ predictor1 + predictor2 + predictor3'))
-deconstruct_formula(stats::as.formula('Surv(outcome, censor_event) ~ predictor'))
-}
+deconstruct_formula(stats::as.formula("outcome ~ predictor1 + predictor2 + predictor3"))
+deconstruct_formula(stats::as.formula("Surv(outcome, censor_event) ~ predictor"))
 
 }
 \author{
