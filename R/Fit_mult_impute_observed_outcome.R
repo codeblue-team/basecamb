@@ -10,15 +10,16 @@
 #' @param formula a formula that describes the model to be fit. The outcome (y
 #'   variable) in the formula will be used to remove missing cases.
 #' @param fitter a modeling function (not in quotes) that is compatible with
-#'   `Hmisc::fit.mult.impute()`. For details see `?Hmisc::fit.mult.impute()`.
+#'   `Hmisc::fit.mult.impute()`.
 #' @param ... additional arguments to `Hmisc::fit.mult.impute()`.
 #'
-#' @return mod a fit.mult.impute object as detailed in `?Hmisc::fit.mult.impute()`.
+#' @return mod a fit.mult.impute object.
 #'
 #' @examples
-#' \dontrun{
-#' fit_mult_impute_obs_outcome(mids = imputed_data, formula = "y ~ x1 + x2", fitter = rms::orm)
-#' }
+#' # create an imputed dataset
+#' imputed_data <- mice::mice(airquality)
+#'
+#' fit_mult_impute_obs_outcome(mids = imputed_data, formula = Ozone ~ Solar.R + Wind, fitter = glm)
 #'
 #' @importFrom assertive.types assert_is_all_of
 #' @importFrom assertive.types assert_is_formula
@@ -71,9 +72,6 @@ fit_mult_impute_obs_outcome <- function(mids,
 #' @return a mids object filtered for observed cases of var.
 #'
 #' @examples
-#' \dontrun{
-#' remove_missing_from_mids(mids = imputed_data, var = "var_with_missing_value")
-#' }
 #'
 #' @importFrom mice filter
 #' @importFrom assertive.types assert_is_all_of

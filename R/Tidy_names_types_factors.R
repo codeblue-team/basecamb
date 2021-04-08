@@ -143,9 +143,6 @@ assign_factorial_levels <- function(data, factor_keys_values) {
 #'
 #' @return named vector
 #'
-#' @examples
-#' basecamb:::.parse_string_to_named_vector("'key1' = 'val1', 'key2' = 'val2'")
-#' basecamb:::.parse_string_to_named_vector("'key1' = 'val1', 'key2' = 'val2', 'default' = 'NA'")
 #'
 #' @importFrom assertive.types assert_is_character
 #'
