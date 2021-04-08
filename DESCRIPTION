@@ -13,7 +13,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "till-best@gmx.de",
            comment = c(ORCID = "0000-0001-7323-827X")))
-Description: Basecamb provides functions streamlining the data analysis workflow: 
+Description: Provides functions streamlining the data analysis workflow: 
   Outsourcing data import, renaming and type casting to a *.csv.
   Manipulating imputed datasets and fitting models on them. Summarizing models.
 Depends: R (>= 4.0.0)
