@@ -126,6 +126,7 @@ assign_factorial_levels <- function(data, factor_keys_values) {
                             data[[col]])
       }
     }
+    data[col] <- as.factor(data[[col]])  # coercing into type factor
   }
   return(data)
 }
