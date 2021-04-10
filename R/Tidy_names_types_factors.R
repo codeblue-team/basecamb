@@ -140,6 +140,51 @@ assign_factorial_levels <- function(data, factor_keys_values) {
 }
 
 
+#' Parse values in date columns as Dates
+#'
+#' Parse date columns in a data.frame as Date.
+#' Use a named list to specify each date column (key) and the format (value) it is coded in.
+#'
+#' @param data data.frame to modify
+#' @param date_formats named list with:
+#' * Keys: Names of date columns
+#' * values: character specifying the format
+#'
+#' @return data.frame with date columns in Date type
+#'
+#' @examples
+#' data <- data.frame(date = rep('01/23/4567', 5))
+#' data <- parse_date_columns(data, list(date = '%m/%d/%Y'))
+#'
+#' @importFrom assertive.types assert_is_data.frame
+#' @importFrom assertive.types assert_is_list
+#'
+#' @export
+#'
+#' @author J. Peter Marquardt
+parse_date_columns <- function(data, date_formats) {
+
+  assertive.types::assert_is_data.frame(data)
+  assertive.types::assert_is_list(date_formats)
+
+  for (col in names(date_formats)) {
+
+    date_format <- date_formats[[col]]
+    if (is.na(date_formats[[col]])) {
+      warning(sprintf("No date format specified for column %s. Using %Y-%m-%d.", col))
+      date_format <- "%Y-%m-%d"
+    }
+    else if (!is.character(date_formats[[col]])) {
+      stop(sprintf("Date format for column %s is not of type character", col))
+    }
+
+    data[col] <- as.Date(data[[col]], format = date_format)
+  }
+
+  return(data)
+}
+
+
 #' Parse a string to create a named list
 #'
 #' Create a named list from a standardised string of the follwoing format:
