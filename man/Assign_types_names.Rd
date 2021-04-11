@@ -20,7 +20,7 @@ datatypes of data. Has the following columns:
 \item float (will be coerced using \code{as.double()}).
 \item factor (will be coerced using \code{as.factor()}).
 Will result in a warning if the new factor variable will have more than 10 levels.
-\item date (can only confirm correct datatype assignment, not coerce other types into date. Uses \code{as.Date()}).
+\item date (can only confirm correct datatype assignment or coerce characters with format '\%Y-\%m-\%d').
 }
 \item new_column_name : tidy column name. Can be left blank to keep the old column name.
 \item Optional other columns (do not affect behavior).
