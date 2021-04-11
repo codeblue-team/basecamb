@@ -6,8 +6,11 @@
 **B**iomedical **A**pplications of **S**tatistical **E**valuation -
 **C**oding **A**ssets by **M**arquardt and **B**est
 
-![lifecycle](https://img.shields.io/badge/license-GPL_3-blue.svg)
-![lifecycle](https://img.shields.io/badge/lifecycle-development-red.svg)
+[![R-CMD-check](https://github.com/codeblue-team/basecamb/workflows/R-CMD-check/badge.svg)](https://github.com/codeblue-team/basecamb/actions)
+
+[\[lifecycle\]](https://img.shields.io/badge/license-GPL_3-blue.svg)
+
+[\[lifecycle\]](https://img.shields.io/badge/lifecycle-development-red.svg)
 
 ## Overview
 
