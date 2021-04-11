@@ -51,18 +51,46 @@ test_that("assign_types_names assigns correct data types", {
                                "new_data_type" = c("float", "integer", "float", "float", "float", "float", "float", "factor", "factor", "integer", "integer", "date"),
                                "new_column_name" = c("miles_per_gallon", "cylinders", "displacement", "horsepower",
                                                      "rear_axle_ratio", "weight_lbs", "quarter_mile_time_secs",
+                                                     "engine_type", "transmission_type", "num_gears", "num_carburetors", "date")
+                               )
+                          )
+  expect_equal(names(assign_types_names(data=data, meta_data = data_dict)),
+               data_dict$new_column_name)
+  expect_true(is.integer(assign_types_names(data=data, meta_data = data_dict)[['cylinders']]))
+  expect_true(is.double(assign_types_names(data=data, meta_data = data_dict)[['horsepower']]))
+  expect_true(is.factor(assign_types_names(data=data, meta_data = data_dict)[['transmission_type']]))
+  expect_equal(class(assign_types_names(data=data, meta_data = data_dict)[['date']]), 'Date')
+  expect_equal(assign_types_names(data=data, meta_data = data_dict)[['date']], rep(as.Date('4567-01-23'), 32))
+  data_dict$new_data_type[1] <- "factor"
+  expect_warning(assign_types_names(data=data, meta_data = data_dict), "In column mpg, created a factor with 25 levels")
+})
+
+
+test_that("apply_data_dictionary assigns correct values", {
+  # Generating a dataset with missing values
+  data <- datasets::mtcars
+  data$date <- "4567-01-23"
+  data$vs[c(2,4,8,16)] <- NA
+  data$am[c(1,3,9,27)] <- NA
+  data_dict <- data.frame(list("old_column_name" = c("mpg", "cyl", "disp", "hp", "drat", "wt", "qsec", "vs", "am", "gear", "carb", "date"),
+                               "new_data_type" = c("float", "integer", "float", "float", "float", "float", "float", "factor", "factor", "integer", "integer", "date"),
+                               "new_column_name" = c("miles_per_gallon", "cylinders", "displacement", "horsepower",
+                                                     "rear_axle_ratio", "weight_lbs", "quarter_mile_time_secs",
                                                      "engine_type", "transmission_type", "num_gears", "num_carburetors", "date"),
                                "coding" = c(NA, NA, NA, NA, NA, NA, NA,
                                             "'0' = 'V-shaped', '1' = 'straight', 'default' = NA",
-                                            "'0' = 'automatic', '1' = 'manual', 'default' = NA",
+                                            "'0' = 'automatic', '1' = 'manual', 'default' = Unknown",
                                             NA, NA, "%m/%d/%Y")
                                )
                           )
-  expect_equal(names(apply_data_dictionary(data=data, data_dictionary = data_dict)),
-               data_dict$new_column_name)
-  expect_true(is.integer(apply_data_dictionary(data=data, data_dictionary = data_dict)[['cylinders']]))
-  expect_true(is.double(apply_data_dictionary(data=data, data_dictionary = data_dict)[['horsepower']]))
-  expect_true(is.factor(apply_data_dictionary(data=data, data_dictionary = data_dict)[['transmission_type']]))
-  expect_equal(class(apply_data_dictionary(data=data, data_dictionary = data_dict)[['date']]), 'Date')
-  expect_equal(apply_data_dictionary(data=data, data_dictionary = data_dict)[['date']], rep(as.Date('4567-01-23'), 32))
+  data <- apply_data_dictionary(data = data, data_dictionary = data_dict)
+  expect_equal(names(data), data_dict$new_column_name)
+  expect_true(is.integer(data[['cylinders']]))
+  expect_true(is.double(data[['horsepower']]))
+  expect_true(is.factor(data[['transmission_type']]))
+  expect_equal(class(data[['date']]), 'Date')
+  expect_equal(data[['date']], rep(as.Date('4567-01-23'), 32))
+  expect_equal(levels(data$engine_type), c("V-shaped", "straight"))
+  expect_equal(levels(data$transmission_type), c("Unknown", "automatic", "manual"))
+  expect_equal(sum(is.na(data$engine_type)), 4)
 })
