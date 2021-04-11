@@ -36,5 +36,5 @@ data_2 <- assign_factorial_levels(data, keys_2)
 
 }
 \author{
-J. Peter Marqurdt
+J. Peter Marquardt
 }
