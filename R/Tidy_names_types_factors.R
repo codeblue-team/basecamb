@@ -14,6 +14,7 @@
 #'   * integer (will be coerced using `as.integer()`).
 #'   * float (will be coerced using `as.double()`).
 #'   * factor (will be coerced using `as.factor()`).
+#'   Will result in a warning if the new factor variable will have more than 10 levels.
 #'   * date (can only confirm correct datatype assignment, not coerce other types into date. Uses `as.Date()`).
 #' * new_column_name : tidy column name. Can be left blank to keep the old column name.
 #' * Optional other columns (do not affect behavior).
@@ -61,6 +62,11 @@ assign_types_names <- function(data, meta_data) {
     else if (data_to_use$new_data_type[i] == "factor") {
       filtered_data[data_to_use$new_column_name[i]] <-
         as.factor(filtered_data[[data_to_use$new_column_name[i]]])
+      if(length(levels(filtered_data[[data_to_use$new_column_name[i]]])) > 10) {
+        warning(sprintf('In column %s, created a factor with %s levels',
+                        data_to_use$old_column_name[i],
+                        length(levels(filtered_data[[data_to_use$new_column_name[i]]]))))
+      }
     }
     else if (data_to_use$new_data_type[i] == "date") {
       filtered_data[data_to_use$new_column_name[i]] <-
@@ -108,7 +114,7 @@ assign_types_names <- function(data, meta_data) {
 #'
 #' @export
 #'
-#' @author J. Peter Marqurdt
+#' @author J. Peter Marquardt
 assign_factorial_levels <- function(data, factor_keys_values) {
 
   assertive.types::assert_is_data.frame(data)
@@ -126,8 +132,10 @@ assign_factorial_levels <- function(data, factor_keys_values) {
                             data[[col]])
       }
     }
+
     data[col] <- as.factor(data[[col]])  # coercing into type factor
   }
+
   return(data)
 }
 
