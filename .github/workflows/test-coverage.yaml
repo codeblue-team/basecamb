@@ -1,4 +1,14 @@
-on: [push, pull_request]
+on:
+  push:
+    branch:
+      - "**"
+      - "!master"
+      - "!main"
+  pull_request:
+    branch:
+      - "**"
+      - "!master"
+      - "!main"
 
 name: test-coverage
 
@@ -31,10 +41,11 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes"))
-          remotes::install_deps(dependencies = TRUE)
+          remotes::install_deps(dependencies = TRUE, type = "binary")
           remotes::install_cran("covr")
         shell: Rscript {0}
 
       - name: Test coverage
-        run: covr::codecov()
+        run: |
+          covr::codecov()
         shell: Rscript {0}
