@@ -6,27 +6,27 @@
 **B**iomedical **A**pplications of **S**tatistical **E**valuation -
 **C**oding **A**ssets by **M**arquardt and **B**est
 
+![lifecycle](https://img.shields.io/badge/lifecycle-development-red.svg)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/basecamb)](https://cran.r-project.org/web/packages/basecamb/index.html)
+
 [![R-CMD-check](https://github.com/codeblue-team/basecamb/workflows/R-CMD-check/badge.svg)](https://github.com/codeblue-team/basecamb/actions)
-
-[\[lifecycle\]](https://img.shields.io/badge/license-GPL_3-blue.svg)
-
-[\[lifecycle\]](https://img.shields.io/badge/lifecycle-development-red.svg)
+![license](https://img.shields.io/badge/license-GPL_3-blue.svg)
 
 ## Overview
 
-basecamp is a collection of utilities for streamlined data analysis
+basecamb is a collection of utilities for streamlined data analysis
 including multiple imputation and model fitting.
 
 ## Installation
 
-basecamp is under active development. You can install either from CRAN
+basecamb is under active development. You can install either from CRAN
 or get the current development version from GitHub.
 
 ``` r
-install.packages("basecamb")
-```
+# The easiest way to get basecmab is installing it from CRAN
+install.packages("baecamb")
 
-``` r
+# Altenatively, you can get the development version from GitHub:
 # install.packages("devtools")
 devtools::install_github("codeblue-team/basecamb")
 ```
