@@ -1,14 +1,12 @@
 on:
   push:
-    branch:
-      - "**"
-      - "!master"
-      - "!main"
+    branches:
+      - main
+      - master
   pull_request:
-    branch:
-      - "**"
-      - "!master"
-      - "!main"
+    branches:
+      - main
+      - master
 
 name: test-coverage
 
