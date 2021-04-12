@@ -18,10 +18,12 @@ apply_data_dictionary(data, data_dictionary)
 \item integer
 \item float
 \item factor
-\item date (can only confirm correct datatype assignment, not coerce other types into date)
+\item date
 }
 \item new_column_name : tidy column name. Can be left blank to keep the old column name
-\item coding (factor columns only) : character denoting old value (key) and new value (value) in a standardised fashion:
+\item coding (factor and date columns only):
+\itemize{
+\item factor columns: character denoting old value (key) and new value (value) in a standardised fashion:
 \itemize{
 \item key-value pairs are separated from other key-value-pairs by a comma (",")
 \item key and value of the same pair are separated by an equal sign ("=")
@@ -31,6 +33,8 @@ apply_data_dictionary(data, data_dictionary)
 \item example coding: "'key1' = 'val1', 'key2' = 'val2', 'default' = NA"
 \item if no coding is specified for a column, the coding remains unchanged
 }
+\item date columns: character denoting coding (see format argument in \code{as.Date})
+}
 \item Optional other columns (do not affect behaviour)
 }}
 }
@@ -38,7 +42,7 @@ apply_data_dictionary(data, data_dictionary)
 clean data.frame
 }
 \description{
-Use a data dictionary data.frame to apply the follwowing tidying steps to your data.frame:
+Use a data dictionary data.frame to apply the following tidying steps to your data.frame:
 \itemize{
 \item Remove superfluous columns
 \item Rename columns

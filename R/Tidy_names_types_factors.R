@@ -1,3 +1,80 @@
+#' Clean column names, types and levels
+#'
+#' Use a data dictionary data.frame to apply the following tidying steps to your data.frame:
+#'   * Remove superfluous columns
+#'   * Rename columns
+#'   * Ensure/coerce correct data type for each column
+#'   * Assign factorial levels, including renaming and grouping
+#'
+#' @param data data.frame to be cleaned
+#' @param data_dictionary data.frame with the following columns:
+#' * old_column_name : character with the old column name
+#' * new_data_type : character denoting the tidy data type. Supported types are:
+#'   * character
+#'   * integer
+#'   * float
+#'   * factor
+#'   * date
+#' * new_column_name : tidy column name. Can be left blank to keep the old column name
+#' * coding (factor and date columns only):
+#'   * factor columns: character denoting old value (key) and new value (value) in a standardised fashion:
+#'     * key-value pairs are separated from other key-value-pairs by a comma (",")
+#'     * key and value of the same pair are separated by an equal sign ("=")
+#'     * quotations around individual keys and values are recommended for clarity, but do not affect functionality.
+#'     * all values will be coerced to type character, with the exception of "NA" being parsed as type NA
+#'     * using "default" as a key will assign the specified value to all current values that do not match any of the specified keys, including NA
+#'     * example coding: "'key1' = 'val1', 'key2' = 'val2', 'default' = NA"
+#'     * if no coding is specified for a column, the coding remains unchanged
+#'   * date columns: character denoting coding (see format argument in `as.Date`)
+#' * Optional other columns (do not affect behaviour)
+#'
+#' @return clean data.frame
+#'
+#' @importFrom assertive.types assert_is_character
+#'
+#' @export
+#'
+#' @author J. Peter Marquardt
+apply_data_dictionary <- function(data, data_dictionary) {
+
+  assertive.types::is_data.frame(data)
+  assertive.types::is_data.frame(data_dictionary)
+
+  # date columns only: Parse dates in the correct format
+  for (rw in seq(1, nrow(data_dictionary))) {
+    if (data_dictionary[rw, "new_data_type"] == "date") {
+      date_format <- list()
+      date_format[[data_dictionary[rw, "old_column_name"]]] <- data_dictionary[rw, "coding"]
+      data <- parse_date_columns(data = data, date_formats = date_format)
+    }
+  }
+
+  # assign correct data types and new column names
+  data <- assign_types_names(data = data, meta_data = data_dictionary)
+
+  # factor columns only: Assign updated factor levels
+  fact_cols_only <- data_dictionary[data_dictionary[["new_data_type"]] == "factor" & !is.na(data_dictionary[["new_data_type"]]), ]
+
+  fact_coding_list <- list()
+  for (i in seq(1, nrow(fact_cols_only))) {
+
+    if(is.na(fact_cols_only[[i, "coding"]])) {  # skip columns without specified coding
+      next
+    }
+
+    col_name <- ifelse(!is.na(fact_cols_only[[i, "new_column_name"]]),
+                       fact_cols_only[[i, "new_column_name"]],
+                       fact_cols_only[[i, "old_column_name"]])
+
+    fact_coding_list[[col_name]] <- .parse_string_to_named_vector(fact_cols_only[[i, "coding"]])
+  }
+
+  data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list)
+
+  return(data)
+}
+
+
 #' Assign tidy types and names to a data.frame
 #'
 #' Verbosely assign tidy name and data type for each column of a data.frame and
@@ -15,7 +92,7 @@
 #'   * float (will be coerced using `as.double()`).
 #'   * factor (will be coerced using `as.factor()`).
 #'   Will result in a warning if the new factor variable will have more than 10 levels.
-#'   * date (can only confirm correct datatype assignment, not coerce other types into date. Uses `as.Date()`).
+#'   * date (can only confirm correct datatype assignment or coerce characters with format '%Y-%m-%d').
 #' * new_column_name : tidy column name. Can be left blank to keep the old column name.
 #' * Optional other columns (do not affect behavior).
 #'
@@ -34,15 +111,15 @@ assign_types_names <- function(data, meta_data) {
 
   # filtering out unused columns
   data_to_use <- meta_data[!is.na(meta_data$new_data_type),
-                      c("old_column_name", "new_data_type", "new_column_name")
-                      ]
+                           c("old_column_name", "new_data_type", "new_column_name")
+  ]
   filtered_data <- data[, data_to_use$old_column_name]
 
   # assigning new names
   data_to_use$new_column_name <- ifelse(!is.na(data_to_use$new_column_name),
                                         data_to_use$new_column_name,
                                         data_to_use$old_column_name
-                                        )
+  )
   colnames(filtered_data) <- data_to_use$new_column_name
 
   # assigning correct datatypes
@@ -74,11 +151,11 @@ assign_types_names <- function(data, meta_data) {
     }
     else {
       warning(sprintf('Type %s not recognized for column %s. Type remains %s.',
-                     as.character(data_to_use$new_data_type[i]),
-                     as.character(data_to_use$old_column_name[i]),
-                     as.character(typeof(filtered_data[data_to_use$new_column_name[i]]))
-                     )
-              )
+                      as.character(data_to_use$new_data_type[i]),
+                      as.character(data_to_use$old_column_name[i]),
+                      as.character(typeof(filtered_data[data_to_use$new_column_name[i]]))
+      )
+      )
     }
   }
 
@@ -171,7 +248,7 @@ parse_date_columns <- function(data, date_formats) {
 
     date_format <- date_formats[[col]]
     if (is.na(date_formats[[col]])) {
-      warning(sprintf("No date format specified for column %s. Using %Y-%m-%d.", col))
+      warning(sprintf("No date format specified for column %s. Using %s.", col, "%Y-%m-%d"))
       date_format <- "%Y-%m-%d"
     }
     else if (!is.character(date_formats[[col]])) {
@@ -226,70 +303,4 @@ parse_date_columns <- function(data, date_formats) {
   }
 
   return(vct)
-}
-
-
-#' Clean column names, types and levels
-#'
-#' Use a data dictionary data.frame to apply the follwowing tidying steps to your data.frame:
-#'   * Remove superfluous columns
-#'   * Rename columns
-#'   * Ensure/coerce correct data type for each column
-#'   * Assign factorial levels, including renaming and grouping
-#'
-#' @param data data.frame to be cleaned
-#' @param data_dictionary data.frame with the following columns:
-#' * old_column_name : character with the old column name
-#' * new_data_type : character denoting the tidy data type. Supported types are:
-#'   * character
-#'   * integer
-#'   * float
-#'   * factor
-#'   * date (can only confirm correct datatype assignment, not coerce other types into date)
-#' * new_column_name : tidy column name. Can be left blank to keep the old column name
-#' * coding (factor columns only) : character denoting old value (key) and new value (value) in a standardised fashion:
-#'   * key-value pairs are separated from other key-value-pairs by a comma (",")
-#'   * key and value of the same pair are separated by an equal sign ("=")
-#'   * quotations around individual keys and values are recommended for clarity, but do not affect functionality.
-#'   * all values will be coerced to type character, with the exception of "NA" being parsed as type NA
-#'   * using "default" as a key will assign the specified value to all current values that do not match any of the specified keys, including NA
-#'   * example coding: "'key1' = 'val1', 'key2' = 'val2', 'default' = NA"
-#'   * if no coding is specified for a column, the coding remains unchanged
-#' * Optional other columns (do not affect behaviour)
-#'
-#' @return clean data.frame
-#'
-#' @importFrom assertive.types assert_is_character
-#'
-#' @export
-#'
-#' @author J. Peter Marquardt
-apply_data_dictionary <- function(data, data_dictionary) {
-
-  assertive.types::is_data.frame(data)
-  assertive.types::is_data.frame(data_dictionary)
-
-  # assign correct data types and new column names
-  data <- assign_types_names(data = data, meta_data = data_dictionary)
-
-  # factor columns only: Assign updated factor levels
-  fact_cols_only <- data_dictionary[data_dictionary[["new_data_type"]] == "factor" & !is.na(data_dictionary[["new_data_type"]]), ]
-
-  fact_coding_list <- list()
-  for (i in seq(1, nrow(fact_cols_only))) {
-
-    if(is.na(fact_cols_only[[i, "coding"]])) {  # skip columns without specified coding
-      next
-    }
-
-    col_name <- ifelse(!is.na(fact_cols_only[[i, "new_column_name"]]),
-                       fact_cols_only[[i, "new_column_name"]],
-                       fact_cols_only[[i, "old_column_name"]])
-
-    fact_coding_list[[col_name]] <- .parse_string_to_named_vector(fact_cols_only[[i, "coding"]])
-  }
-
-  data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list)
-
-  return(data)
 }
