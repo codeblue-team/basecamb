@@ -42,9 +42,9 @@ apply_data_dictionary <- function(data, data_dictionary) {
 
   # date columns only: Parse dates in the correct format
   for (rw in seq(1, nrow(data_dictionary))) {
-    if (data_dictionary[rw, "new_data_type"] == "date") {
+    if (data_dictionary[[rw, "new_data_type"]] == "date" & !is.na(data_dictionary[[rw, "new_data_type"]])) {
       date_format <- list()
-      date_format[[data_dictionary[rw, "old_column_name"]]] <- data_dictionary[rw, "coding"]
+      date_format[[data_dictionary[[rw, "old_column_name"]]]] <- data_dictionary[[rw, "coding"]]
       data <- parse_date_columns(data = data, date_formats = date_format)
     }
   }
@@ -56,18 +56,21 @@ apply_data_dictionary <- function(data, data_dictionary) {
   fact_cols_only <- data_dictionary[data_dictionary[["new_data_type"]] == "factor" & !is.na(data_dictionary[["new_data_type"]]), ]
 
   fact_coding_list <- list()
-  for (i in seq(1, nrow(fact_cols_only))) {
+  if(nrow(fact_cols_only) > 0) {
+    for (i in seq(1, nrow(fact_cols_only))) {
 
-    if(is.na(fact_cols_only[[i, "coding"]])) {  # skip columns without specified coding
-      next
+      if(is.na(fact_cols_only[[i, "coding"]])) {  # skip columns without specified coding
+        next
+      }
+
+      col_name <- ifelse(!is.na(fact_cols_only[[i, "new_column_name"]]),
+                         fact_cols_only[[i, "new_column_name"]],
+                         fact_cols_only[[i, "old_column_name"]])
+
+      fact_coding_list[[col_name]] <- .parse_string_to_named_vector(fact_cols_only[[i, "coding"]])
     }
-
-    col_name <- ifelse(!is.na(fact_cols_only[[i, "new_column_name"]]),
-                       fact_cols_only[[i, "new_column_name"]],
-                       fact_cols_only[[i, "old_column_name"]])
-
-    fact_coding_list[[col_name]] <- .parse_string_to_named_vector(fact_cols_only[[i, "coding"]])
   }
+
 
   data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list)
 
