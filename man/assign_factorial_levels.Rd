@@ -25,9 +25,9 @@ assign_factorial_levels(
 }
 }}
 
-\item{na_action_default}{character: Specify what to do with NA values. Defaults to 'keep_na'. Options are:
+\item{na_action_default}{character: Specify what to do with NA values. Defaults to 'keep_NA'. Options are:
 \itemize{
-\item 'keep_na' NA values remain NA values
+\item 'keep_NA' NA values remain NA values
 \item 'assign_default' NA values are assigned the value specified as 'default'. Requires a 'default' value to be specified
 Can be overwritten for individal columns by specifying a value for key 'NA'
 }}

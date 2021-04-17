@@ -91,7 +91,7 @@ test_that("apply_data_dictionary assigns correct values", {
   data_dict <- data.frame(list("old_column_name" = c("mpg", "cyl", "disp", "hp", "drat", "wt", "qsec", "vs",
                                                      "am", "gear", "carb", "date", "date1", "date2"),
                                "new_data_type" = c("float", "integer", "float", "float", "float", "float", "float",
-                                                   "factor", "factor", "integer", "integer", "date", "date", "date"),
+                                                   "factor", "factor", "factor", "integer", "date", "date", "date"),
                                "new_column_name" = c("miles_per_gallon", "cylinders", "displacement", "horsepower",
                                                      "rear_axle_ratio", "weight_lbs", "quarter_mile_time_secs",
                                                      "engine_type", "transmission_type", "num_gears",
@@ -99,7 +99,8 @@ test_that("apply_data_dictionary assigns correct values", {
                                "coding" = c(NA, NA, NA, NA, NA, NA, NA,
                                             "'0' = 'V-shaped', '1' = 'straight', 'default' = NA",
                                             "'0' = 'automatic', '1' = 'manual', 'NA' = Unknown",
-                                            NA, NA, "%Y-%m-%d", "%m/%d/%Y", "%m-%d-%Y")
+                                            "'3' = 'Three'",
+                                            NA, "%Y-%m-%d", "%m/%d/%Y", "%m-%d-%Y")
                                )
                           )
   data <- apply_data_dictionary(data = data, data_dictionary = data_dict)
@@ -114,6 +115,8 @@ test_that("apply_data_dictionary assigns correct values", {
   expect_equal(levels(data$engine_type), c("V-shaped", "straight"))
   expect_equal(levels(data$transmission_type), c("Unknown", "automatic", "manual"))
   expect_equal(sum(is.na(data$engine_type)), 4)
+  expect_error(apply_data_dictionary(data = data_copy, data_dictionary = data_dict, na_action_default = 'assign_default'),
+               "In column num_gears: Selected \"assign_default\" as na_action_default without specifying default level.")
   data_dict$coding[14] <- NA
   expect_warning(apply_data_dictionary(data = data_copy, data_dictionary = data_dict),
                  "No date format specified for column date2. Using %Y-%m-%d.")
