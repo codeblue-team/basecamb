@@ -40,6 +40,9 @@ apply_data_dictionary <- function(data, data_dictionary) {
   assertive.types::is_data.frame(data)
   assertive.types::is_data.frame(data_dictionary)
 
+  # save the input data to find NA introductions at the end
+  data_raw <- data
+
   # date columns only: Parse dates in the correct format
   for (rw in seq(1, nrow(data_dictionary))) {
     if (data_dictionary[[rw, "new_data_type"]] == "date" & !is.na(data_dictionary[[rw, "new_data_type"]])) {
@@ -71,6 +74,8 @@ apply_data_dictionary <- function(data, data_dictionary) {
     }
   }
 
+  # check for introduced NA's
+  .find_NA_coercions(data_raw = data_raw, data = data)
 
   data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list)
 
@@ -267,13 +272,13 @@ parse_date_columns <- function(data, date_formats) {
 
 #' Parse a string to create a named list
 #'
-#' Create a named list from a standardised string of the follwoing format:
+#' Create a named list from a standardized string of the following format:
 #'   * key-value pairs are separated from other key-value-pairs by a comma (",")
 #'   * key and value of the same pair are separated by an equal sign ("=")
 #'   * quotations around individual keys and values are recommended for clarity, but do not affect functionality.
 #'   * all values will be coerced to type character, with the exception of "NA", "TRUE" and "FALSE"
 #'
-#' @param str character with standardised pattern to be parsed
+#' @param str character with standardized pattern to be parsed
 #'
 #' @return named vector
 #'
@@ -306,4 +311,39 @@ parse_date_columns <- function(data, date_formats) {
   }
 
   return(vct)
+}
+
+
+#' Locate NA values introduced during data cleaning
+#'
+#' Finds and locates NA values that were introduced by `apply_data_dictionary()`.
+#' Prints a message indicating which values have been coerced to NA's.
+#'
+#' @param data_raw data.frame that was provided as input to `apply_data_dictionary()`
+#' @param data data.frame that is returned by `apply_data_dictionary()`
+#'
+#' @keywords internal
+#'
+#' @author J. Peter Marquardt, Till D. Best
+.find_NA_coercions <- function(data_raw, data) {
+  #  create a dataframe matchin the old and new column name in our data dictionary
+  rosetta_stone <- data.frame(old_name = data_dictionary$old_column_name[!is.na(data_dictionary$new_data_type)],
+                              new_name = colnames(data))
+
+  # find those value where NA's were introduced
+  NA_difference <- is.na(data_raw[colname_match$old_name]) < is.na(data)
+
+  # find location of mismatching NA
+  NA_location <- apply(NA_difference, 2, function(x) which(x == TRUE))
+
+  # turn into dataframe
+  df_NA_coerced <- data.frame("column" = rep(x = names(NA_location),
+                                             unlist(lapply(NA_location, length))),
+                              "row" = unlist(NA_location),
+                              "value" = data_raw[colname_match$old_name][NA_difference],
+                              "coerced_to" = data[NA_difference],
+                              row.names = NULL)
+  # print messages
+  message("In the following rows and columns values have been coereced to NA's \n")
+  message(paste0(capture.output(df_NA_coerced), collapse = "\n"))
 }
