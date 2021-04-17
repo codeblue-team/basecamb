@@ -27,6 +27,9 @@ A typical use cases would be to filter a dataset for the first or last measureme
 }
 \examples{
 data <- data.frame(list(ID = rep(1:5, 3), encounter = rep(1:3, each=5), value = rep(4:6, each=5)))
+filter_nth_entry(data, 'ID', 'encounter')
+filter_nth_entry(data, 'ID', 'encounter', n = 2)
+filter_nth_entry(data, 'ID', 'encounter', reverse_order = TRUE)
 
 
 }

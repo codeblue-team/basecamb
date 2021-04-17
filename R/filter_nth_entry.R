@@ -14,6 +14,9 @@
 #'
 #' @examples
 #' data <- data.frame(list(ID = rep(1:5, 3), encounter = rep(1:3, each=5), value = rep(4:6, each=5)))
+#' filter_nth_entry(data, 'ID', 'encounter')
+#' filter_nth_entry(data, 'ID', 'encounter', n = 2)
+#' filter_nth_entry(data, 'ID', 'encounter', reverse_order = TRUE)
 #'
 #'
 #' @importFrom assertive.types assert_is_data.frame
@@ -36,10 +39,9 @@ filter_nth_entry <- function(data, ID_column, entry_column, n=1, reverse_order=F
   filtered_df <- data.frame()
   ID_list <- c()
   for (i in seq(1, nrow(data))){
-    ID <- data[[i, ID_column]]
-    if (!(ID %in% ID_list)) {
-      ID_list <- append(ID_list, ID)
-      subject_df <- data[data[[ID_column]] == ID, ]
+    if (!(data[[i, ID_column]] %in% ID_list)) {
+      ID_list <- append(ID_list, data[[i, ID_column]])
+      subject_df <- data[data[[ID_column]] == data[[i, ID_column]], ]
       subject_df <- subject_df[order(subject_df[[entry_column]], decreasing = reverse_order),]
       if(!(is.na(subject_df[[n, ID_column]]))){
         filtered_df <- rbind(filtered_df, subject_df[n, ])
