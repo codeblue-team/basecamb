@@ -24,7 +24,7 @@ or get the current development version from GitHub.
 
 ``` r
 # The easiest way to get basecmab is installing it from CRAN
-install.packages("baecamb")
+install.packages("basecamb")
 
 # Altenatively, you can get the development version from GitHub:
 # install.packages("devtools")

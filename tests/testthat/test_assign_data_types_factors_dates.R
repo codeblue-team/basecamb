@@ -26,20 +26,33 @@ test_that("assign_factorial_levels assigns factor levels correctly", {
                      col1 = as.factor(rep(c('1', '2', '4'), 5)),
                      col2 = as.factor(rep(c('1', '2', '4'), 5)),
                      col3 = as.factor(rep(c('1', '2', '4'), 5)),
-                     col4 = rep(c('1', '2', '4'), 5)
+                     col4 = rep(c('1', '2', '4'), 5),
+                     col5 = as.factor(rep(c('1', '2', NA), 5)),
+                     col6 = as.factor(rep(c('1', '2', NA), 5)),
+                     col7 = as.factor(rep(c('1', '2', NA), 5))
                      )
-  data <- assign_factorial_levels(data, list(col = c('1' = 'One', '2' = 'Two', '4' = 'Four'),
+  data1 <- assign_factorial_levels(data, list(col = c('1' = 'One', '2' = 'Two', '4' = 'Four'),
                                              col1 = c('1' = 'One', '2' = 'Two'),
                                              col2 = c('1' = 'One', 'default' = 'Not_One'),
-                                             col3 = c('1' = 'One', 'default' = NA)
+                                             col3 = c('1' = 'One', 'default' = NA),
+                                             col5 = c('1' = 'One', 'default' = 'Not_One'),
+                                             col6 = c('1' = 'One', 'default' = 'Not_One', 'NA' = 'N/A')
                                              )
                                   )
-  expect_equal(data$col, as.factor(rep(c('One', 'Two', 'Four'), 5)))
-  expect_equal(data$col1, as.factor(rep(c('One', 'Two', '4'), 5)))
-  expect_equal(data$col2, as.factor(rep(c('One', 'Not_One', 'Not_One'), 5)))
-  expect_equal(data$col3, as.factor(rep(c('One', NA, NA), 5)))
+  data1 <- assign_factorial_levels(data1, list(col7 = c('1' = 'One', 'default' = 'Not_One')),
+                                  na_action_default = 'assign_default')
+
+  expect_equal(data1$col, as.factor(rep(c('One', 'Two', 'Four'), 5)))
+  expect_equal(data1$col1, as.factor(rep(c('One', 'Two', '4'), 5)))
+  expect_equal(data1$col2, as.factor(rep(c('One', 'Not_One', 'Not_One'), 5)))
+  expect_equal(data1$col3, as.factor(rep(c('One', NA, NA), 5)))
+  expect_equal(data1$col5, as.factor(rep(c('One', 'Not_One', NA), 5)))
+  expect_equal(data1$col6, as.factor(rep(c('One', 'Not_One', 'N/A'), 5)))
+  expect_equal(data1$col7, as.factor(rep(c('One', 'Not_One', 'Not_One'), 5)))
   expect_error(assign_factorial_levels(data, list(col4 = c('1' = 'One'))),
                "attempting to coerce non-factor")
+  expect_error(assign_factorial_levels(data, list(col5 = c('1' = 'One')), na_action_default = 'assign_default'),
+               "In column col5: Selected \"assign_default\" as na_action_default without specifying default level.")
 })
 
 
@@ -78,15 +91,16 @@ test_that("apply_data_dictionary assigns correct values", {
   data_dict <- data.frame(list("old_column_name" = c("mpg", "cyl", "disp", "hp", "drat", "wt", "qsec", "vs",
                                                      "am", "gear", "carb", "date", "date1", "date2"),
                                "new_data_type" = c("float", "integer", "float", "float", "float", "float", "float",
-                                                   "factor", "factor", "integer", "integer", "date", "date", "date"),
+                                                   "factor", "factor", "factor", "integer", "date", "date", "date"),
                                "new_column_name" = c("miles_per_gallon", "cylinders", "displacement", "horsepower",
                                                      "rear_axle_ratio", "weight_lbs", "quarter_mile_time_secs",
                                                      "engine_type", "transmission_type", "num_gears",
                                                      "num_carburetors", "date", "date1", "date2"),
                                "coding" = c(NA, NA, NA, NA, NA, NA, NA,
                                             "'0' = 'V-shaped', '1' = 'straight', 'default' = NA",
-                                            "'0' = 'automatic', '1' = 'manual', 'default' = Unknown",
-                                            NA, NA, "%Y-%m-%d", "%m/%d/%Y", "%m-%d-%Y")
+                                            "'0' = 'automatic', '1' = 'manual', 'NA' = Unknown",
+                                            "'3' = 'Three'",
+                                            NA, "%Y-%m-%d", "%m/%d/%Y", "%m-%d-%Y")
                                )
                           )
   data <- apply_data_dictionary(data = data, data_dictionary = data_dict, print_coerced_NA = FALSE)
@@ -101,6 +115,8 @@ test_that("apply_data_dictionary assigns correct values", {
   expect_equal(levels(data$engine_type), c("V-shaped", "straight"))
   expect_equal(levels(data$transmission_type), c("Unknown", "automatic", "manual"))
   expect_equal(sum(is.na(data$engine_type)), 4)
+  expect_error(apply_data_dictionary(data = data_copy, data_dictionary = data_dict, na_action_default = 'assign_default'),
+               "In column num_gears: Selected \"assign_default\" as na_action_default without specifying default level.")
   data_dict$coding[14] <- NA
   expect_warning(apply_data_dictionary(data = data_copy, data_dictionary = data_dict),
                  "No date format specified for column date2. Using %Y-%m-%d.")
