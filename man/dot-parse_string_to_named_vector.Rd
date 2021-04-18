@@ -7,13 +7,13 @@
 .parse_string_to_named_vector(str)
 }
 \arguments{
-\item{str}{character with standardised pattern to be parsed}
+\item{str}{character with standardized pattern to be parsed}
 }
 \value{
 named vector
 }
 \description{
-Create a named list from a standardised string of the follwoing format:
+Create a named list from a standardised string of the following format:
 \itemize{
 \item key-value pairs are separated from other key-value-pairs by a comma (",")
 \item key and value of the same pair are separated by an equal sign ("=")

@@ -28,24 +28,37 @@
 #'     * if no coding is specified for a column, the coding remains unchanged
 #'   * date columns: character denoting coding (see format argument in `as.Date`)
 #' * Optional other columns (do not affect behaviour)
+#' @param print_coerced_NA logical indicating whether a message specifying the
+#'   location of NAs that are introduced by apply_data_dictionary() to data
+#'   should be printed.
 #' @param na_action_default character: Specify what to do with NA values. Defaults to 'keep_NA'. Options are:
 #' * 'keep_NA' NA values remain NA values
 #' * 'assign_default' NA values are assigned the value specified as 'default'. Requires a 'default' value to be specified
 #' Can be overwritten for individal columns by specifying a value for key 'NA'
+#' @param print_coerced_NA logical indicating whether a message specifying the
+#'   location of NAs that are introduced by apply_data_dictionary() to data
+#'   should be printed.
 #'
 #' @return clean data.frame
 #'
-#' @importFrom assertive.types is_data.frame
+#' @importFrom assertive.types is_data.frame is_a_bool
 #' @importFrom assertthat assert_that
 #'
 #' @export
 #'
 #' @author J. Peter Marquardt
-apply_data_dictionary <- function(data, data_dictionary, na_action_default='keep_NA') {
+apply_data_dictionary <- function(data,
+                                  data_dictionary,
+                                  na_action_default = 'keep_NA',
+                                  print_coerced_NA = TRUE) {
 
   assertive.types::is_data.frame(data)
   assertive.types::is_data.frame(data_dictionary)
   assertthat::assert_that(na_action_default %in% c("keep_NA", "assign_default"))
+  assertive.types::is_a_bool(print_coerced_NA)
+
+  # save the input data to find NA introductions at the end
+  data_raw <- data
 
   # date columns only: Parse dates in the correct format
   for (rw in seq(1, nrow(data_dictionary))) {
@@ -78,9 +91,20 @@ apply_data_dictionary <- function(data, data_dictionary, na_action_default='keep
     }
   }
 
+  data <- assign_factorial_levels(data = data,
+                                  factor_keys_values = fact_coding_list,
+                                  na_action_default = na_action_default)
 
-  data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list, na_action_default = na_action_default)
-
+  # check for introduced NA's and print if any exist
+  if (print_coerced_NA) {
+    df_NA_location <- .find_NA_coercions(data_raw = data_raw,
+                                         data = data,
+                                         data_dictionary = data_dictionary)
+    if (nrow(df_NA_location > 0)) {
+      message("In the following rows and columns, values have been coereced to NA's \n",
+              paste0(utils::capture.output(df_NA_location), collapse = "\n"))
+    }
+  }
   return(data)
 }
 
@@ -303,13 +327,13 @@ parse_date_columns <- function(data, date_formats) {
 
 #' Parse a string to create a named list
 #'
-#' Create a named list from a standardised string of the follwoing format:
+#' Create a named list from a standardised string of the following format:
 #'   * key-value pairs are separated from other key-value-pairs by a comma (",")
 #'   * key and value of the same pair are separated by an equal sign ("=")
 #'   * quotations around individual keys and values are recommended for clarity, but do not affect functionality.
 #'   * all values will be coerced to type character, with the exception of "NA", "TRUE" and "FALSE"
 #'
-#' @param str character with standardised pattern to be parsed
+#' @param str character with standardized pattern to be parsed
 #'
 #' @return named vector
 #'
@@ -342,4 +366,45 @@ parse_date_columns <- function(data, date_formats) {
   }
 
   return(vct)
+}
+
+
+
+#' Locate NA values introduced during apply_data_dictionary()
+#'
+#' Finds and locates NA values that were introduced by calling `apply_data_dictionary()`
+#'   on a dataframe using a data_dictionary.
+#'
+#'
+#' @param data_raw data.frame that was provided as input to `apply_data_dictionary()`
+#' @param data data.frame that is returned by `apply_data_dictionary()`
+#' @param data_dictionary the data_dictionary used by `apply_data_dictionary()`
+#'   to turn "data_raw" into "data".
+#'
+#' @return returns a dataframe with the location of introduced NA's. If no NA's
+#'   were introduced an empty dataframe is returned.
+#'
+#' @keywords internal
+#'
+#' @author Till D. Best, J. Peter Marquardt
+.find_NA_coercions <- function(data_raw, data, data_dictionary) {
+  #  create a dataframe matchin the old and new column name in our data dictionary
+  rosetta_stone <- data.frame(old_name = data_dictionary$old_column_name[!is.na(data_dictionary$new_data_type)],
+                              new_name = colnames(data))
+
+  # find those value where NA's were introduced
+  NA_difference <- is.na(data_raw[rosetta_stone$old_name]) < is.na(data)
+
+  # find location of mismatching NA
+  NA_location <- apply(NA_difference, 2, function(x) which(x == TRUE))
+
+  # turn into dataframe specifying location of introduced NA's + original values
+  df_NA_coerced <- data.frame("column" = rep(x = names(NA_location),
+                                             unlist(lapply(NA_location, length))),
+                              "row" = unlist(NA_location),
+                              "value" = data_raw[rosetta_stone$old_name][NA_difference],
+                              "coerced_to" = data[NA_difference],
+                              row.names = NULL)
+
+  return(df_NA_coerced)
 }

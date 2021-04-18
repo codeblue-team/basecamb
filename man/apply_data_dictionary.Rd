@@ -4,7 +4,12 @@
 \alias{apply_data_dictionary}
 \title{Clean column names, types and levels}
 \usage{
-apply_data_dictionary(data, data_dictionary, na_action_default = "keep_NA")
+apply_data_dictionary(
+  data,
+  data_dictionary,
+  na_action_default = "keep_NA",
+  print_coerced_NA = TRUE
+)
 }
 \arguments{
 \item{data}{data.frame to be cleaned}
@@ -45,6 +50,10 @@ apply_data_dictionary(data, data_dictionary, na_action_default = "keep_NA")
 \item 'assign_default' NA values are assigned the value specified as 'default'. Requires a 'default' value to be specified
 Can be overwritten for individal columns by specifying a value for key 'NA'
 }}
+
+\item{print_coerced_NA}{logical indicating whether a message specifying the
+location of NAs that are introduced by apply_data_dictionary() to data
+should be printed.}
 }
 \value{
 clean data.frame
