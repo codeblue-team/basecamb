@@ -19,6 +19,7 @@ Description: Provides functions streamlining the data analysis workflow:
 Depends: R (>= 4.0.0)
 Imports:
   assertive.types,
+  assertthat,
   mice,
   Hmisc
 License: GPL (>= 3)

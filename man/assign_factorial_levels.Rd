@@ -4,7 +4,11 @@
 \alias{assign_factorial_levels}
 \title{Assign custom values for key levels in factorial columns}
 \usage{
-assign_factorial_levels(data, factor_keys_values)
+assign_factorial_levels(
+  data,
+  factor_keys_values,
+  na_action_default = "keep_NA"
+)
 }
 \arguments{
 \item{data}{data.frame to modify}
@@ -16,8 +20,16 @@ assign_factorial_levels(data, factor_keys_values)
 \itemize{
 \item keys: current value (string representation)
 \item values: new value to be assigned
-\item if a 'default' key is passed, all values not conforming to the new scheme will be converted to the 'default' value
+\item if a 'default' key is passed, all existing values not conforming to the new scheme will be converted to the 'default' value
+\item if a 'NA' key is passed, all NA values will be converted to the value specified here. Overwrites na_action_default for the specified column.
 }
+}}
+
+\item{na_action_default}{character: Specify what to do with NA values. Defaults to 'keep_NA'. Options are:
+\itemize{
+\item 'keep_NA' NA values remain NA values
+\item 'assign_default' NA values are assigned the value specified as 'default'. Requires a 'default' value to be specified
+Can be overwritten for individal columns by specifying a value for key 'NA'
 }}
 }
 \value{
