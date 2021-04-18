@@ -89,7 +89,7 @@ test_that("apply_data_dictionary assigns correct values", {
                                             NA, NA, "%Y-%m-%d", "%m/%d/%Y", "%m-%d-%Y")
                                )
                           )
-  data <- apply_data_dictionary(data = data, data_dictionary = data_dict)
+  data <- apply_data_dictionary(data = data, data_dictionary = data_dict, print_coerced_NA = FALSE)
   expect_equal(names(data), data_dict$new_column_name)
   expect_true(is.integer(data[['cylinders']]))
   expect_true(is.double(data[['horsepower']]))
@@ -106,9 +106,14 @@ test_that("apply_data_dictionary assigns correct values", {
                  "No date format specified for column date2. Using %Y-%m-%d.")
 
   # Test whether the call to `.find_NA_coercions()` works properly and that NA's are found
+  data_dict$coding[14] <- "%Y-%m-%d"
   data_dict$new_data_type[12] <- "integer"
-  expect_message(object = apply_data_dictionary(data = data_copy, data_dictionary = data_dict),
+  # test whether custom message is returned
+  expect_message(object = suppressWarnings(apply_data_dictionary(data = data_copy, data_dictionary = data_dict, print_coerced_NA = TRUE)),
                  regexp = "In the following rows and columns, values have been coereced to NA's")
+  # test whether generic warning is returned
+  expect_warning(object = apply_data_dictionary(data = data_copy, data_dictionary = data_dict, print_coerced_NA = FALSE),
+                 regexp = "NAs introduced by coercion")
 })
 
 
@@ -118,25 +123,29 @@ testthat::test_that(".find_NA_coercions finds introduced NA's.", {
   data_raw <- data.frame(a_char = c("1", "2", "a", "b"),
                          b_char = c("1970-01-01", "1970-11-05", "1970-5-22", "1970-99-01"))
 
+  # create output (based on data_dictionary below)
+  data <- data.frame(a_numeric = c(1, 2, NA, NA),
+                     b_date = as.Date(c("1970-01-01", "1970-11-05", "1970-5-22", NA), format = "%Y-%m-%d"))
+
   # create data dictionary, reflecting differnce between data_raw and data
   data_dictionary <- data.frame(old_column_name = colnames(data_raw),
                                 new_data_type = c("float", "date"),
                                 new_column_name = colnames(data),
                                 coding = NA)
-  # create output (based on data_dictionary above)
-  data <- data.frame(a_numeric = c(1, 2, NA, NA),
-                     b_date = as.Date(c("1970-01-01", "1970-11-05", "1970-5-22", NA), format = "%Y-%m-%d"))
-
 
   # find NA coercion when casting character to integer
-  testthat::expect_equal(object = .find_NA_coercions(data_raw, data)[1:2, ],
+  testthat::expect_equal(object = .find_NA_coercions(data_raw = data_raw,
+                                                     data = data,
+                                                     data_dictionary = data_dictionary)[1:2, ],
                          expected = data.frame(column = c("a_char", "a_char"),
                                                row = c(3, 4),
                                                value = c("a", "b"),
                                                coerced_to = c(NA_character_, NA_character_),
                                                row.names = c(1L, 2L)))
   # find NA coercion when casting character to date
-  testthat::expect_equal(object = .find_NA_coercions(data_raw, data)[3, ],
+  testthat::expect_equal(object = .find_NA_coercions(data_raw = data_raw,
+                                                     data = data,
+                                                     data_dictionary = data_dictionary)[3, ],
                          expected = data.frame(column = "b_char",
                                                row = 4,
                                                value = "1970-99-01",
