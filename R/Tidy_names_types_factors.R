@@ -32,6 +32,9 @@
 #' * 'keep_NA' NA values remain NA values
 #' * 'assign_default' NA values are assigned the value specified as 'default'. Requires a 'default' value to be specified
 #' Can be overwritten for individal columns by specifying a value for key 'NA'
+#' @param print_coerced_NA logical indicating whether a message specifying the
+#'   location of NAs that are introduced by apply_data_dictionary() to data
+#'   should be printed.
 #'
 #' @return clean data.frame
 #'
@@ -41,11 +44,18 @@
 #' @export
 #'
 #' @author J. Peter Marquardt
-apply_data_dictionary <- function(data, data_dictionary, na_action_default='keep_NA') {
+apply_data_dictionary <- function(data,
+                                  data_dictionary,
+                                  na_action_default = 'keep_NA',
+                                  print_coerced_NA = TRUE) {
 
   assertive.types::is_data.frame(data)
   assertive.types::is_data.frame(data_dictionary)
   assertthat::assert_that(na_action_default %in% c("keep_NA", "assign_default"))
+  assertive.types::is_a_bool(print_coerced_NA)
+
+
+
 
   # save the input data to find NA introductions at the end
   data_raw <- data
@@ -81,18 +91,18 @@ apply_data_dictionary <- function(data, data_dictionary, na_action_default='keep
     }
   }
 
-  # check for introduced NA's and print if any exist
-  df_NA_location <- .find_NA_coercions(data_raw = data_raw,
-                                       data = data,
-                                       data_dictionary = data_dictionary)
-  if (nrow(df_NA_location > 0)) {
-    message("In the following rows and columns, values have been coereced to NA's \n",
-            paste0(capture.output(df_NA_location), collapse = "\n"))
-  }
-
-
   data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list, na_action_default = na_action_default)
 
+  # check for introduced NA's and print if any exist
+  if (print_coerced_NA) {
+    df_NA_location <- .find_NA_coercions(data_raw = data_raw,
+                                         data = data,
+                                         data_dictionary = data_dictionary)
+    if (nrow(df_NA_location > 0)) {
+      message("In the following rows and columns, values have been coereced to NA's \n",
+              paste0(capture.output(df_NA_location), collapse = "\n"))
+    }
+  }
   return(data)
 }
 
