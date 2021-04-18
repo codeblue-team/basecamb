@@ -120,4 +120,42 @@ test_that("apply_data_dictionary assigns correct values", {
   data_dict$coding[14] <- NA
   expect_warning(apply_data_dictionary(data = data_copy, data_dictionary = data_dict),
                  "No date format specified for column date2. Using %Y-%m-%d.")
+
+  # Test whether the call to `.find_NA_coercions()` works properly and that NA's are found
+  data_dict$new_data_type[12] <- "integer"
+  expect_message(object = apply_data_dictionary(data = data_copy, data_dictionary = data_dict),
+                 regexp = "In the following rows and columns, values have been coereced to NA's")
+})
+
+
+testthat::test_that(".find_NA_coercions finds introduced NA's.", {
+
+  # create input
+  data_raw <- data.frame(a_char = c("1", "2", "a", "b"),
+                         b_char = c("1970-01-01", "1970-11-05", "1970-5-22", "1970-99-01"))
+
+  # create data dictionary, reflecting differnce between data_raw and data
+  data_dictionary <- data.frame(old_column_name = colnames(data_raw),
+                                new_data_type = c("float", "date"),
+                                new_column_name = colnames(data),
+                                coding = NA)
+  # create output (based on data_dictionary above)
+  data <- data.frame(a_numeric = c(1, 2, NA, NA),
+                     b_date = as.Date(c("1970-01-01", "1970-11-05", "1970-5-22", NA), format = "%Y-%m-%d"))
+
+
+  # find NA coercion when casting character to integer
+  testthat::expect_equal(object = .find_NA_coercions(data_raw, data)[1:2, ],
+                         expected = data.frame(column = c("a_char", "a_char"),
+                                               row = c(3, 4),
+                                               value = c("a", "b"),
+                                               coerced_to = c(NA_character_, NA_character_),
+                                               row.names = c(1L, 2L)))
+  # find NA coercion when casting character to date
+  testthat::expect_equal(object = .find_NA_coercions(data_raw, data)[3, ],
+                         expected = data.frame(column = "b_char",
+                                               row = 4,
+                                               value = "1970-99-01",
+                                               coerced_to = NA_character_,
+                                               row.names = 3L))
 })
