@@ -54,9 +54,6 @@ apply_data_dictionary <- function(data,
   assertthat::assert_that(na_action_default %in% c("keep_NA", "assign_default"))
   assertive.types::is_a_bool(print_coerced_NA)
 
-
-
-
   # save the input data to find NA introductions at the end
   data_raw <- data
 
@@ -91,7 +88,9 @@ apply_data_dictionary <- function(data,
     }
   }
 
-  data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list, na_action_default = na_action_default)
+  data <- assign_factorial_levels(data = data,
+                                  factor_keys_values = fact_coding_list,
+                                  na_action_default = na_action_default)
 
   # check for introduced NA's and print if any exist
   if (print_coerced_NA) {
@@ -100,7 +99,7 @@ apply_data_dictionary <- function(data,
                                          data_dictionary = data_dictionary)
     if (nrow(df_NA_location > 0)) {
       message("In the following rows and columns, values have been coereced to NA's \n",
-              paste0(capture.output(df_NA_location), collapse = "\n"))
+              paste0(utils::capture.output(df_NA_location), collapse = "\n"))
     }
   }
   return(data)
