@@ -74,8 +74,15 @@ apply_data_dictionary <- function(data, data_dictionary) {
     }
   }
 
-  # check for introduced NA's
-  .find_NA_coercions(data_raw = data_raw, data = data)
+  # check for introduced NA's and print if any exist
+  df_NA_location <- .find_NA_coercions(data_raw = data_raw,
+                                       data = data,
+                                       data_dictionary = data_dictionary)
+  if (nrow(df_NA_location > 0)) {
+    message("In the following rows and columns, values have been coereced to NA's \n",
+            paste0(capture.output(df_NA_location), collapse = "\n"))
+  }
+
 
   data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list)
 
@@ -316,34 +323,39 @@ parse_date_columns <- function(data, date_formats) {
 
 #' Locate NA values introduced during data cleaning
 #'
-#' Finds and locates NA values that were introduced by `apply_data_dictionary()`.
-#' Prints a message indicating which values have been coerced to NA's.
+#' Finds and locates NA values that were introduced by calling `apply_data_dictionary()`
+#'   on a dataframe using a data_dictionary.
+#'
 #'
 #' @param data_raw data.frame that was provided as input to `apply_data_dictionary()`
 #' @param data data.frame that is returned by `apply_data_dictionary()`
+#' @param data_dictionary the data_dictionary used by `apply_data_dictionary()`
+#'   to turn "data_raw" into "data".
+#'
+#' @return returns a dataframe with the location of introduced NA's. If no NA's
+#'   were introduced an empty dataframe is returned.
 #'
 #' @keywords internal
 #'
-#' @author J. Peter Marquardt, Till D. Best
-.find_NA_coercions <- function(data_raw, data) {
+#' @author Till D. Best, J. Peter Marquardt
+.find_NA_coercions <- function(data_raw, data, data_dictionary) {
   #  create a dataframe matchin the old and new column name in our data dictionary
   rosetta_stone <- data.frame(old_name = data_dictionary$old_column_name[!is.na(data_dictionary$new_data_type)],
                               new_name = colnames(data))
 
   # find those value where NA's were introduced
-  NA_difference <- is.na(data_raw[colname_match$old_name]) < is.na(data)
+  NA_difference <- is.na(data_raw[rosetta_stone$old_name]) < is.na(data)
 
   # find location of mismatching NA
   NA_location <- apply(NA_difference, 2, function(x) which(x == TRUE))
 
-  # turn into dataframe
+  # turn into dataframe specifying location of introduced NA's + original values
   df_NA_coerced <- data.frame("column" = rep(x = names(NA_location),
                                              unlist(lapply(NA_location, length))),
                               "row" = unlist(NA_location),
-                              "value" = data_raw[colname_match$old_name][NA_difference],
+                              "value" = data_raw[rosetta_stone$old_name][NA_difference],
                               "coerced_to" = data[NA_difference],
                               row.names = NULL)
-  # print messages
-  message("In the following rows and columns values have been coereced to NA's \n")
-  message(paste0(capture.output(df_NA_coerced), collapse = "\n"))
+
+  return(df_NA_coerced)
 }
