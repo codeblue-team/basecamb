@@ -22,23 +22,30 @@
 #'     * key and value of the same pair are separated by an equal sign ("=")
 #'     * quotations around individual keys and values are recommended for clarity, but do not affect functionality.
 #'     * all values will be coerced to type character, with the exception of "NA" being parsed as type NA
-#'     * using "default" as a key will assign the specified value to all current values that do not match any of the specified keys, including NA
-#'     * example coding: "'key1' = 'val1', 'key2' = 'val2', 'default' = NA"
+#'     * using "default" as a key will assign the specified value to all current values that do not match any of the specified keys, excluding NA
+#'     * using "NA" as a key will assign the specified value to all current NA values
+#'     * example coding: "'key1' = 'val1', 'key2' = 'val2', 'default' = 'Other', 'NA' = NA"
 #'     * if no coding is specified for a column, the coding remains unchanged
 #'   * date columns: character denoting coding (see format argument in `as.Date`)
 #' * Optional other columns (do not affect behaviour)
+#' @param na_action_default character: Specify what to do with NA values. Defaults to 'keep_NA'. Options are:
+#' * 'keep_NA' NA values remain NA values
+#' * 'assign_default' NA values are assigned the value specified as 'default'. Requires a 'default' value to be specified
+#' Can be overwritten for individal columns by specifying a value for key 'NA'
 #'
 #' @return clean data.frame
 #'
-#' @importFrom assertive.types assert_is_character
+#' @importFrom assertive.types is_data.frame
+#' @importFrom assertthat assert_that
 #'
 #' @export
 #'
 #' @author J. Peter Marquardt
-apply_data_dictionary <- function(data, data_dictionary) {
+apply_data_dictionary <- function(data, data_dictionary, na_action_default='keep_NA') {
 
   assertive.types::is_data.frame(data)
   assertive.types::is_data.frame(data_dictionary)
+  assertthat::assert_that(na_action_default %in% c("keep_NA", "assign_default"))
 
   # date columns only: Parse dates in the correct format
   for (rw in seq(1, nrow(data_dictionary))) {
@@ -72,7 +79,7 @@ apply_data_dictionary <- function(data, data_dictionary) {
   }
 
 
-  data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list)
+  data <- assign_factorial_levels(data = data, factor_keys_values = fact_coding_list, na_action_default = na_action_default)
 
   return(data)
 }
@@ -178,7 +185,12 @@ assign_types_names <- function(data, meta_data) {
 #' * values: Named vectors with
 #'    * keys: current value (string representation)
 #'    * values: new value to be assigned
-#'    * if a 'default' key is passed, all values not conforming to the new scheme will be converted to the 'default' value
+#'    * if a 'default' key is passed, all existing values not conforming to the new scheme will be converted to the 'default' value
+#'    * if a 'NA' key is passed, all NA values will be converted to the value specified here. Overwrites na_action_default for the specified column.
+#' @param na_action_default character: Specify what to do with NA values. Defaults to 'keep_NA'. Options are:
+#' * 'keep_NA' NA values remain NA values
+#' * 'assign_default' NA values are assigned the value specified as 'default'. Requires a 'default' value to be specified
+#' Can be overwritten for individal columns by specifying a value for key 'NA'
 #'
 #' @return data frame with new levels
 #'
@@ -191,23 +203,47 @@ assign_types_names <- function(data, meta_data) {
 #'
 #' @importFrom assertive.types assert_is_data.frame
 #' @importFrom assertive.types assert_is_list
+#' @importFrom assertthat assert_that
 #'
 #' @export
 #'
 #' @author J. Peter Marquardt
-assign_factorial_levels <- function(data, factor_keys_values) {
+assign_factorial_levels <- function(data, factor_keys_values, na_action_default="keep_NA") {
 
   assertive.types::assert_is_data.frame(data)
   assertive.types::assert_is_list(factor_keys_values)
+  assertthat::assert_that(na_action_default %in% c("keep_NA", "assign_default"))
 
   for (col in names(factor_keys_values)) {
+
+    # Establish action when encountering NA values
+    if (! "NA" %in% names(factor_keys_values[[col]])) {
+      if(na_action_default == "keep_na") {
+        factor_keys_values[[col]]['NA'] <- NA
+      }
+      else if(na_action_default == "assign_default") {
+
+        if (! "default" %in% names(factor_keys_values[[col]])) {
+          stop(sprintf("In column %s: Selected \"assign_default\" as na_action_default without specifying default level.", col))
+        }
+        factor_keys_values[[col]]['NA'] <- factor_keys_values[[col]]['default']
+      }
+    }
+
     data[col] <- as.character.factor(data[[col]])
     for (level in names(factor_keys_values[[col]])) {
       data[col] <- ifelse(data[[col]] == level,
                           factor_keys_values[[col]][[level]],
                           data[[col]])
+      if (level == "NA") {
+        data[col] <- ifelse(is.na(data[[col]]),
+                            factor_keys_values[[col]][[level]],
+                            data[[col]])
+      }
       if (level == "default") { # assign default value to all fields that don't have a value yet
-        data[col] <- ifelse(!data[[col]] %in% unname(factor_keys_values[[col]]),
+        data[col] <- ifelse(!data[[col]] %in% unname(factor_keys_values[[col]])
+                            & !data[[col]] %in% names(factor_keys_values[[col]])
+                            & !is.na(data[[col]]),
                             factor_keys_values[[col]][[level]],
                             data[[col]])
       }
