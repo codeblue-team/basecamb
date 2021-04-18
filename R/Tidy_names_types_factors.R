@@ -33,7 +33,7 @@
 #'
 #' @return clean data.frame
 #'
-#' @importFrom assertive.types assert_is_character
+#' @importFrom assertive.types is_data.frame is_a_bool
 #'
 #' @export
 #'
@@ -284,7 +284,7 @@ parse_date_columns <- function(data, date_formats) {
 
 #' Parse a string to create a named list
 #'
-#' Create a named list from a standardized string of the following format:
+#' Create a named list from a standardised string of the following format:
 #'   * key-value pairs are separated from other key-value-pairs by a comma (",")
 #'   * key and value of the same pair are separated by an equal sign ("=")
 #'   * quotations around individual keys and values are recommended for clarity, but do not affect functionality.
@@ -326,7 +326,7 @@ parse_date_columns <- function(data, date_formats) {
 }
 
 
-#' Locate NA values introduced during data cleaning
+#' Locate NA values introduced during apply_data_dictionary()
 #'
 #' Finds and locates NA values that were introduced by calling `apply_data_dictionary()`
 #'   on a dataframe using a data_dictionary.
