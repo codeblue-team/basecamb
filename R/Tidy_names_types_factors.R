@@ -28,6 +28,9 @@
 #'     * if no coding is specified for a column, the coding remains unchanged
 #'   * date columns: character denoting coding (see format argument in `as.Date`)
 #' * Optional other columns (do not affect behaviour)
+#' @param print_coerced_NA logical indicating whether a message specifying the
+#'   location of NAs that are introduced by apply_data_dictionary() to data
+#'   should be printed.
 #' @param na_action_default character: Specify what to do with NA values. Defaults to 'keep_NA'. Options are:
 #' * 'keep_NA' NA values remain NA values
 #' * 'assign_default' NA values are assigned the value specified as 'default'. Requires a 'default' value to be specified
@@ -38,7 +41,7 @@
 #'
 #' @return clean data.frame
 #'
-#' @importFrom assertive.types is_data.frame
+#' @importFrom assertive.types is_data.frame is_a_bool
 #' @importFrom assertthat assert_that
 #'
 #' @export
@@ -324,7 +327,7 @@ parse_date_columns <- function(data, date_formats) {
 
 #' Parse a string to create a named list
 #'
-#' Create a named list from a standardized string of the following format:
+#' Create a named list from a standardised string of the following format:
 #'   * key-value pairs are separated from other key-value-pairs by a comma (",")
 #'   * key and value of the same pair are separated by an equal sign ("=")
 #'   * quotations around individual keys and values are recommended for clarity, but do not affect functionality.
@@ -366,7 +369,8 @@ parse_date_columns <- function(data, date_formats) {
 }
 
 
-#' Locate NA values introduced during data cleaning
+
+#' Locate NA values introduced during apply_data_dictionary()
 #'
 #' Finds and locates NA values that were introduced by calling `apply_data_dictionary()`
 #'   on a dataframe using a data_dictionary.
