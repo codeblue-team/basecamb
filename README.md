@@ -7,7 +7,7 @@
 **C**oding **A**ssets by **M**arquardt and **B**est
 
 ![lifecycle](https://img.shields.io/badge/lifecycle-development-red.svg)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/basecamb)](https://cran.r-project.org/web/packages/basecamb/index.html)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/basecamb)](https://cran.r-project.org/package=basecamb)
 
 [![R-CMD-check](https://github.com/codeblue-team/basecamb/workflows/R-CMD-check/badge.svg)](https://github.com/codeblue-team/basecamb/actions)
 ![license](https://img.shields.io/badge/license-GPL_3-blue.svg)
