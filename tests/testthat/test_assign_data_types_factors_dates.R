@@ -126,7 +126,7 @@ test_that("apply_data_dictionary assigns correct values", {
   data_dict$new_data_type[12] <- "integer"
   # test whether custom message is returned
   expect_message(object = suppressWarnings(apply_data_dictionary(data = data_copy, data_dictionary = data_dict, print_coerced_NA = TRUE)),
-                 regexp = "In the following rows and columns, values have been coereced to NA's")
+                 regexp = "In the following rows and columns, values have been coerced to NA's")
   # test whether generic warning is returned
   expect_warning(object = apply_data_dictionary(data = data_copy, data_dictionary = data_dict, print_coerced_NA = FALSE),
                  regexp = "NAs introduced by coercion")
@@ -156,7 +156,6 @@ testthat::test_that(".find_NA_coercions finds introduced NA's.", {
                          expected = data.frame(column = c("a_char", "a_char"),
                                                row = c(3, 4),
                                                value = c("a", "b"),
-                                               coerced_to = c(NA_character_, NA_character_),
                                                row.names = c(1L, 2L)))
   # find NA coercion when casting character to date
   testthat::expect_equal(object = .find_NA_coercions(data_raw = data_raw,
@@ -165,6 +164,5 @@ testthat::test_that(".find_NA_coercions finds introduced NA's.", {
                          expected = data.frame(column = "b_char",
                                                row = 4,
                                                value = "1970-99-01",
-                                               coerced_to = NA_character_,
                                                row.names = 3L))
 })

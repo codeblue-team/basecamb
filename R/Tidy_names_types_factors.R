@@ -43,6 +43,7 @@
 #'
 #' @importFrom assertive.types is_data.frame is_a_bool
 #' @importFrom assertthat assert_that
+#' @importFrom utils capture.output
 #'
 #' @export
 #'
@@ -101,7 +102,7 @@ apply_data_dictionary <- function(data,
                                          data = data,
                                          data_dictionary = data_dictionary)
     if (nrow(df_NA_location > 0)) {
-      message("In the following rows and columns, values have been coereced to NA's \n",
+      message("In the following rows and columns, values have been coerced to NA's \n",
               paste0(utils::capture.output(df_NA_location), collapse = "\n"))
     }
   }
@@ -403,7 +404,6 @@ parse_date_columns <- function(data, date_formats) {
                                              unlist(lapply(NA_location, length))),
                               "row" = unlist(NA_location),
                               "value" = data_raw[rosetta_stone$old_name][NA_difference],
-                              "coerced_to" = data[NA_difference],
                               row.names = NULL)
 
   return(df_NA_coerced)
