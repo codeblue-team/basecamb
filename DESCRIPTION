@@ -21,7 +21,8 @@ Imports:
   assertive.types,
   assertthat,
   mice,
-  Hmisc
+  Hmisc,
+  purrr
 License: GPL (>= 3)
 Encoding: UTF-8
 RoxygenNote: 7.1.1

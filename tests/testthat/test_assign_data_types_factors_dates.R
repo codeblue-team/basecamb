@@ -165,4 +165,5 @@ testthat::test_that(".find_NA_coercions finds introduced NA's.", {
                                                row = 4,
                                                value = "1970-99-01",
                                                row.names = 3L))
+
 })
