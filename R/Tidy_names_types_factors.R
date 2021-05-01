@@ -387,6 +387,8 @@ parse_date_columns <- function(data, date_formats) {
 #'
 #' @keywords internal
 #'
+#' @importFrom purrr is_empty
+#'
 #' @author Till D. Best, J. Peter Marquardt
 .find_NA_coercions <- function(data_raw, data, data_dictionary) {
   #  create a dataframe matchin the old and new column name in our data dictionary
@@ -399,12 +401,19 @@ parse_date_columns <- function(data, date_formats) {
   # find location of mismatching NA
   NA_location <- apply(NA_difference, 2, function(x) which(x == TRUE))
 
-  # turn into dataframe specifying location of introduced NA's + original values
-  df_NA_coerced <- data.frame("column" = rep(x = names(NA_location),
-                                             unlist(lapply(NA_location, length))),
-                              "row" = unlist(NA_location),
-                              "value" = data_raw[rosetta_stone$old_name][NA_difference],
-                              row.names = NULL)
+  # check if we found any NAs
+  if (purrr::is_empty(NA_location)) {
+    return(data.frame())
+  }
+  else {
+    # turn into dataframe specifying location of introduced NA's + original values
+    df_NA_coerced <- data.frame("column" = rep(x = names(NA_location),
+                                               unlist(lapply(NA_location, length))),
+                                "row" = unlist(NA_location),
+                                "value" = data_raw[rosetta_stone$old_name][NA_difference],
+                                row.names = NULL)
+    return(df_NA_coerced)
+  }
 
-  return(df_NA_coerced)
+
 }
