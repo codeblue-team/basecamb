@@ -1,7 +1,7 @@
 Package: basecamb
 Type: Package
 Title: Utilities for Streamlined Data Import, Imputation and Modelling
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: 
   c(person(given = "J. Peter",
            family = "Marquardt",
