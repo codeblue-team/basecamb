@@ -10,7 +10,7 @@
 #'
 #' @return The data with the newly scaled 'variables'.
 #'
-#' @importFrom dplyr filter pull
+#' @importFrom dplyr pull
 #' @importFrom assertive.types assert_is_numeric assert_is_character
 #'
 #' @export
@@ -34,7 +34,7 @@ scale_continuous_predictors.data.frame <- function(data, scaling_dictionary) {
   assertive.types::assert_is_numeric(x = scaling_dictionary[["scaling_denominator"]])
   assertive.types::assert_is_character(x = scaling_dictionary[["variable"]])
   # remove cases where scaling is NA
-  dict_df <- dplyr::filter(.data = scaling_dictionary, !is.na(scaling_denominator))
+  dict_df <- scaling_dictionary[!is.na(scaling_dictionary[['scaling_denominator']]), ]
 
   # find remaining cases where variable is NA
   if (sum(is.na(dict_df[["variable"]])) >= 1L) {
@@ -42,7 +42,7 @@ scale_continuous_predictors.data.frame <- function(data, scaling_dictionary) {
   }
 
   # turn into list
-  dict_list <- dplyr::pull(.data = dict_df, var = scaling_denominator, name = variable)
+  dict_list <- dplyr::pull(.data = dict_df, var = 'scaling_denominator', name = variable)
 
   # scale all variables in dict_list according to the scaling value
   data_scaled <- data
