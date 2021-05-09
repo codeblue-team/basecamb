@@ -1,8 +1,8 @@
 #' Scale continuous predictors
 #'
-#' This function linearily scales variables in data objects according to a data dictionary.
+#' This function linearly scales variables in data objects according to a data dictionary.
 #'   The data dictionary has at least two columns, "variable" and "scaling_denominator".
-#'   "Variable" is **divided** by "scaling_denominator".
+#'   "Variable" is divided by "scaling_denominator".
 #'
 #' @param data a data object with variables.
 #' @param scaling_dictionary a data.frame with two columns that are called
