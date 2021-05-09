@@ -20,6 +20,7 @@ Depends: R (>= 4.0.0)
 Imports:
   assertive.types,
   assertthat,
+  dplyr,
   mice,
   Hmisc,
   purrr
