@@ -16,7 +16,7 @@
 #' @export
 #'
 #' @author J. Peter Marquardt
-apply_function_to_imputed_data <- function(mice_data, fun) {
+apply_function_to_imputed_data <- function(mice_data, fun, ...) {
   assertive.types::assert_is_all_of(x = mice_data, classes = "mids")
   assertive.types::assert_is_function(x = fun)
 
@@ -25,7 +25,7 @@ apply_function_to_imputed_data <- function(mice_data, fun) {
 
   #  apply method to each imputed dataset
   for (n_imp in unique(long$.imp)) {
-    data <- fun(long[long$.imp == n_imp, ])  # perform fun on one iteration only
+    data <- fun(long[long$.imp == n_imp, ], ...)  # perform fun on one iteration only
 
     return_dat <- rbind.data.frame(return_dat, data)  # append results to long-type return df
   }
