@@ -42,7 +42,7 @@ scale_continuous_predictors.data.frame <- function(data, scaling_dictionary) {
   }
 
   # turn into list
-  dict_list <- dplyr::pull(.data = dict_df, var = 'scaling_denominator', name = variable)
+  dict_list <- dplyr::pull(.data = dict_df, var = 'scaling_denominator', name = 'variable')
 
   # scale all variables in dict_list according to the scaling value
   data_scaled <- data
