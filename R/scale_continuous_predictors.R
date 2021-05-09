@@ -58,6 +58,16 @@ scale_continuous_predictors.data.frame <- function(data, scaling_dictionary) {
 }
 
 
+#' @export
+scale_continuous_predictors.mids <- function(data, scaling_dictionary) {
+  data_scaled <- apply_function_to_imputed_data(mice_data = data,
+                                                fun = scale_continuous_predictors,
+                                                scaling_dictionary = scaling_dictionary)
+
+  return(data_scaled)
+}
+
+
 #' Scaling a variable
 #'
 #' A helper function to scale a variable in a dataframe.
@@ -70,7 +80,11 @@ scale_continuous_predictors.data.frame <- function(data, scaling_dictionary) {
 #'
 #' @return the input dataframe with the newly scaled 'variable'
 .scale_variable <- function(data, variable, scaling_denominator) {
-  data[[variable]] <- data[[variable]] / scaling_denominator
-
+  if (is.factor(data[[variable]])) {
+    warning(sprintf("Column '%s' is of type factor and cannot be scaled.", variable))
+  }
+  else {
+    data[[variable]] <- data[[variable]] / scaling_denominator
+  }
   return(data)
 }
