@@ -1,7 +1,7 @@
 Package: basecamb
 Type: Package
 Title: Utilities for Streamlined Data Import, Imputation and Modelling
-Version: 1.0.3
+Version: 1.0.4
 Authors@R: 
   c(person(given = "J. Peter",
            family = "Marquardt",
@@ -20,6 +20,7 @@ Depends: R (>= 4.0.0)
 Imports:
   assertive.types,
   assertthat,
+  dplyr,
   mice,
   Hmisc,
   purrr
