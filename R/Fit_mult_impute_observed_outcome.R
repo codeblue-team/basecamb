@@ -43,7 +43,7 @@ fit_mult_impute_obs_outcome <- function(mids,
   mod <- Hmisc::fit.mult.impute(
     formula = formula, # model formula
     fitter = fitter, # the type of model fitted
-    xtrans = mids_filtered, # the imputed dataset
+    xtrans = mids, # the imputed dataset
     pr = FALSE,
     x = TRUE,
     y = TRUE,
@@ -76,8 +76,6 @@ fit_mult_impute_obs_outcome <- function(mids,
 #' @importFrom mice filter
 #' @importFrom assertive.types assert_is_all_of
 #' @importFrom assertive.types assert_is_character
-#'
-#' @export
 #'
 #' @author Till D. Best
 .remove_missing_from_mids <- function(mids, var) {
