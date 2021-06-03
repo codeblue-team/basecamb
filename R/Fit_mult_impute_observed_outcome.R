@@ -1,10 +1,10 @@
-#' Fit a model on multiply imputed data using only observatoin with non-missing
+#' Fit a model on multiply imputed data using only observations with non-missing
 #'   outcome(s)
 #'
-#' This function fits a regression model using `Hmisc::fit.mult.impute()` on a
+#' This function is a wrapper for fitting models with `Hmisc::fit.mult.impute()` on a
 #'   multiply imputed dataset generated with `mice::mice()`. Cases with a
 #'   missing outcome in the original dataset are removed from the mids object
-#'   before model fitting.
+#'   by using the "subset" argument in `Hmisc::fit.mult.impute()`.
 #'
 #' @param mids a mids object, i.e. the imputed dataset.
 #' @param formula a formula that describes the model to be fit. The outcome (y
@@ -38,8 +38,6 @@ fit_mult_impute_obs_outcome <- function(mids,
 
   # get the outcome from the formula
   y_var <- deconstruct_formula(formula = formula)$outcome
-  # remove missing cases of the outcome from the variable
-  mids_filtered <- remove_missing_from_mids(mids = mids, var = y_var)
 
   # fit models
   mod <- Hmisc::fit.mult.impute(
@@ -49,6 +47,7 @@ fit_mult_impute_obs_outcome <- function(mids,
     pr = FALSE,
     x = TRUE,
     y = TRUE,
+    subset = !is.na(y_var), # subset the data for only those observations that have an observed outcome
     ... # other arguments to fit.mult.impute()
   )
 
