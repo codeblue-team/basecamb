@@ -2,7 +2,7 @@
 % Please edit documentation in R/Fit_mult_impute_observed_outcome.R
 \name{fit_mult_impute_obs_outcome}
 \alias{fit_mult_impute_obs_outcome}
-\title{Fit a model on multiply imputed data using only observatoin with non-missing
+\title{Fit a model on multiply imputed data using only observations with non-missing
 outcome(s)}
 \usage{
 fit_mult_impute_obs_outcome(mids, formula, fitter, ...)
@@ -22,10 +22,10 @@ variable) in the formula will be used to remove missing cases.}
 mod a fit.mult.impute object.
 }
 \description{
-This function fits a regression model using \code{Hmisc::fit.mult.impute()} on a
+This function is a wrapper for fitting models with \code{Hmisc::fit.mult.impute()} on a
 multiply imputed dataset generated with \code{mice::mice()}. Cases with a
 missing outcome in the original dataset are removed from the mids object
-before model fitting.
+by using the "subset" argument in \code{Hmisc::fit.mult.impute()}.
 }
 \examples{
 # create an imputed dataset
