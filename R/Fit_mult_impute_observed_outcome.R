@@ -57,8 +57,7 @@ fit_mult_impute_obs_outcome <- function(mids,
 
 #' Remove missing cases from a mids object
 #'
-#' !!! Deprecated !!! This used to be a helper function for basecamb::fit_mult_impute_obs_outcome
-#'   that is no longer needed. !!! Deprecated !!!
+#' Deprecated, use \code{\link{apply_function_to_imputed_data}} instead.
 #'
 #'   Remove_missing_from_mids is used to filter a mids object for missing cases
 #'   in the original dataset in the variable var. This is useful for situations
@@ -77,8 +76,14 @@ fit_mult_impute_obs_outcome <- function(mids,
 #' @importFrom assertive.types assert_is_all_of
 #' @importFrom assertive.types assert_is_character
 #'
+#' @export
+#'
+#' @seealso \code{\link{apply_function_to_imputed_data}}
+#'
 #' @author Till D. Best
-.remove_missing_from_mids <- function(mids, var) {
+remove_missing_from_mids <- function(mids, var) {
+  .Deprecated(new='apply_function_to_imputed_data', package='basecamb')
+
   # assert that inputed is as expected
   assertive.types::assert_is_all_of(x = mids, classes = "mids")
   assertive.types::assert_is_character(var)
