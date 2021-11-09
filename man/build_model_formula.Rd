@@ -4,7 +4,12 @@
 \alias{build_model_formula}
 \title{Build formula for statistical models}
 \usage{
-build_model_formula(outcome, predictors, censor_event = NULL)
+build_model_formula(
+  outcome,
+  predictors,
+  censor_event = NULL,
+  env = parent.frame()
+)
 }
 \arguments{
 \item{outcome}{character denoting the column with the outcome.}
@@ -14,12 +19,14 @@ predictors.}
 
 \item{censor_event}{character denoting the column with the censoring event,
 for use in Survival-type models.}
+
+\item{env}{environment to be used in formula creation}
 }
 \value{
 formula for use in statistical models
 }
 \description{
-Build formula used in statistical models from vectors of strings.
+Build formula used in statistical models from vectors of strings with the option to specify an environment.
 }
 \examples{
 build_model_formula("outcome", c("pred_1", "pred_2"))
