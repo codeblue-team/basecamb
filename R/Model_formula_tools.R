@@ -1,12 +1,13 @@
 #' Build formula for statistical models
 #'
-#' Build formula used in statistical models from vectors of strings.
+#' Build formula used in statistical models from vectors of strings with the option to specify an environment.
 #'
 #' @param outcome character denoting the column with the outcome.
 #' @param predictors vector of characters denoting the columns with the
 #'   predictors.
 #' @param censor_event character denoting the column with the censoring event,
 #'   for use in Survival-type models.
+#' @param env environment to be used in formula creation
 #'
 #' @return formula for use in statistical models
 #'
@@ -19,7 +20,7 @@
 #' @export
 #'
 #' @author J. Peter Marquardt
-build_model_formula <- function(outcome, predictors, censor_event=NULL) {
+build_model_formula <- function(outcome, predictors, censor_event=NULL, env = parent.frame()) {
 
   assertive.types::assert_is_character(outcome)
   assertive.types::assert_is_character(predictors)
@@ -28,7 +29,9 @@ build_model_formula <- function(outcome, predictors, censor_event=NULL) {
     frml <- as.formula(paste(outcome,
                              ' ~ ',
                              paste(predictors, collapse = ' + '),
-                             sep = ''))
+                             sep = ''),
+                       env = env
+    )
   }
 
   else {  # Survival-type formula
@@ -39,7 +42,9 @@ build_model_formula <- function(outcome, predictors, censor_event=NULL) {
                              censor_event,
                              ')~',
                              paste(predictors, collapse = ' + '),
-                             sep = ''))
+                             sep = ''),
+                       env = env
+    )
   }
 
   return(frml)
