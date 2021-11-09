@@ -28,9 +28,6 @@
 #'     * if no coding is specified for a column, the coding remains unchanged
 #'   * date columns: character denoting coding (see format argument in `as.Date`)
 #' * Optional other columns (do not affect behaviour)
-#' @param print_coerced_NA logical indicating whether a message specifying the
-#'   location of NAs that are introduced by apply_data_dictionary() to data
-#'   should be printed.
 #' @param na_action_default character: Specify what to do with NA values. Defaults to 'keep_NA'. Options are:
 #' * 'keep_NA' NA values remain NA values
 #' * 'assign_default' NA values are assigned the value specified as 'default'. Requires a 'default' value to be specified
