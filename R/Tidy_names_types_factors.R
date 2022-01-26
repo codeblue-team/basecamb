@@ -40,6 +40,7 @@
 #'
 #' @importFrom assertive.types is_data.frame is_a_bool
 #' @importFrom assertthat assert_that
+#' @importFrom utils capture.output
 #'
 #' @export
 #'
@@ -98,7 +99,7 @@ apply_data_dictionary <- function(data,
                                          data = data,
                                          data_dictionary = data_dictionary)
     if (nrow(df_NA_location > 0)) {
-      message("In the following rows and columns, values have been coereced to NA's \n",
+      message("In the following rows and columns, values have been coerced to NA's \n",
               paste0(utils::capture.output(df_NA_location), collapse = "\n"))
     }
   }
@@ -383,6 +384,8 @@ parse_date_columns <- function(data, date_formats) {
 #'
 #' @keywords internal
 #'
+#' @importFrom purrr is_empty
+#'
 #' @author Till D. Best, J. Peter Marquardt
 .find_NA_coercions <- function(data_raw, data, data_dictionary) {
   #  create a dataframe matchin the old and new column name in our data dictionary
@@ -395,13 +398,19 @@ parse_date_columns <- function(data, date_formats) {
   # find location of mismatching NA
   NA_location <- apply(NA_difference, 2, function(x) which(x == TRUE))
 
-  # turn into dataframe specifying location of introduced NA's + original values
-  df_NA_coerced <- data.frame("column" = rep(x = names(NA_location),
-                                             unlist(lapply(NA_location, length))),
-                              "row" = unlist(NA_location),
-                              "value" = data_raw[rosetta_stone$old_name][NA_difference],
-                              "coerced_to" = data[NA_difference],
-                              row.names = NULL)
+  # check if we found any NAs
+  if (purrr::is_empty(NA_location)) {
+    return(data.frame())
+  }
+  else {
+    # turn into dataframe specifying location of introduced NA's + original values
+    df_NA_coerced <- data.frame("column" = rep(x = names(NA_location),
+                                               unlist(lapply(NA_location, length))),
+                                "row" = unlist(NA_location),
+                                "value" = data_raw[rosetta_stone$old_name][NA_difference],
+                                row.names = NULL)
+    return(df_NA_coerced)
+  }
 
-  return(df_NA_coerced)
+
 }

@@ -20,11 +20,13 @@ Depends: R (>= 4.0.0)
 Imports:
   assertive.types,
   assertthat,
+  dplyr,
   mice,
   Hmisc,
   dplyr,
   survival,
-  stats
+  stats,
+  purrr
 License: GPL (>= 3)
 Encoding: UTF-8
 RoxygenNote: 7.1.2
