@@ -20,14 +20,20 @@ Depends: R (>= 4.0.0)
 Imports:
   assertive.types,
   assertthat,
+  dplyr,
   mice,
-  Hmisc
+  Hmisc,
+  dplyr,
+  survival,
+  stats,
+  purrr
 License: GPL (>= 3)
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    rms
 Config/testthat/edition: 3
 URL: https://CRAN.R-project.org/package=basecamb, https://github.com/codeblue-team/basecamb
 BugReports: https://github.com/codeblue-team/basecamb/issues
