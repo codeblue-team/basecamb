@@ -16,12 +16,18 @@ cases (i.e. rows) for which there are missing values are removed.}
 a mids object filtered for observed cases of var.
 }
 \description{
+Deprecated, use \code{\link{apply_function_to_imputed_data}} instead.
+}
+\details{
 Remove_missing_from_mids is used to filter a mids object for missing cases
 in the original dataset in the variable var. This is useful for situations
 where you want to use as many observations as possible for imputation but
 only fit your model on a subset of these. Or, if you want to create one
 large imputed datset from which multiple analyses with multiple outcomes
 are derived.
+}
+\seealso{
+\code{\link{apply_function_to_imputed_data}}
 }
 \author{
 Till D. Best

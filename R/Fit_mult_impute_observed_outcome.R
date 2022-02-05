@@ -1,10 +1,10 @@
-#' Fit a model on multiply imputed data using only observatoin with non-missing
+#' Fit a model on multiply imputed data using only observations with non-missing
 #'   outcome(s)
 #'
-#' This function fits a regression model using `Hmisc::fit.mult.impute()` on a
+#' This function is a wrapper for fitting models with `Hmisc::fit.mult.impute()` on a
 #'   multiply imputed dataset generated with `mice::mice()`. Cases with a
 #'   missing outcome in the original dataset are removed from the mids object
-#'   before model fitting.
+#'   by using the "subset" argument in `Hmisc::fit.mult.impute()`.
 #'
 #' @param mids a mids object, i.e. the imputed dataset.
 #' @param formula a formula that describes the model to be fit. The outcome (y
@@ -38,17 +38,16 @@ fit_mult_impute_obs_outcome <- function(mids,
 
   # get the outcome from the formula
   y_var <- deconstruct_formula(formula = formula)$outcome
-  # remove missing cases of the outcome from the variable
-  mids_filtered <- remove_missing_from_mids(mids = mids, var = y_var)
 
   # fit models
   mod <- Hmisc::fit.mult.impute(
     formula = formula, # model formula
     fitter = fitter, # the type of model fitted
-    xtrans = mids_filtered, # the imputed dataset
+    xtrans = mids, # the imputed dataset
     pr = FALSE,
     x = TRUE,
     y = TRUE,
+    subset = !is.na(y_var), # subset the data for only those observations that have an observed outcome
     ... # other arguments to fit.mult.impute()
   )
 
@@ -58,7 +57,9 @@ fit_mult_impute_obs_outcome <- function(mids,
 
 #' Remove missing cases from a mids object
 #'
-#' Remove_missing_from_mids is used to filter a mids object for missing cases
+#' Deprecated, use \code{\link{apply_function_to_imputed_data}} instead.
+#'
+#'   Remove_missing_from_mids is used to filter a mids object for missing cases
 #'   in the original dataset in the variable var. This is useful for situations
 #'   where you want to use as many observations as possible for imputation but
 #'   only fit your model on a subset of these. Or, if you want to create one
@@ -77,8 +78,12 @@ fit_mult_impute_obs_outcome <- function(mids,
 #'
 #' @export
 #'
+#' @seealso \code{\link{apply_function_to_imputed_data}}
+#'
 #' @author Till D. Best
 remove_missing_from_mids <- function(mids, var) {
+  .Deprecated(new='apply_function_to_imputed_data', package='basecamb')
+
   # assert that inputed is as expected
   assertive.types::assert_is_all_of(x = mids, classes = "mids")
   assertive.types::assert_is_character(var)

@@ -126,10 +126,20 @@ test_that("apply_data_dictionary assigns correct values", {
   data_dict$new_data_type[12] <- "integer"
   # test whether custom message is returned
   expect_message(object = suppressWarnings(apply_data_dictionary(data = data_copy, data_dictionary = data_dict, print_coerced_NA = TRUE)),
-                 regexp = "In the following rows and columns, values have been coereced to NA's")
+                 regexp = "In the following rows and columns, values have been coerced to NA's")
   # test whether generic warning is returned
   expect_warning(object = apply_data_dictionary(data = data_copy, data_dictionary = data_dict, print_coerced_NA = FALSE),
                  regexp = "NAs introduced by coercion")
+
+  # Test whether the call to `.find_NA_coercions()` works properly when no NA's have been introduced
+  ## set the "date2" column coding to something that will not introduce NA's
+  data_dict$coding[14] <- "%Y-%m-%d"
+  data_dict$new_data_type[12] <- "date"
+  ## check for apply_data_dictionary and specifically the call to .find_NA_coercoins() to NOT return a message
+  expect_message(object = apply_data_dictionary(data = data_copy, data_dictionary = data_dict, print_coerced_NA = TRUE),
+                 regexp = NA)
+
+
 })
 
 
@@ -143,7 +153,7 @@ testthat::test_that(".find_NA_coercions finds introduced NA's.", {
   data <- data.frame(a_numeric = c(1, 2, NA, NA),
                      b_date = as.Date(c("1970-01-01", "1970-11-05", "1970-5-22", NA), format = "%Y-%m-%d"))
 
-  # create data dictionary, reflecting differnce between data_raw and data
+  # create data dictionary, reflecting difference between data_raw and data
   data_dictionary <- data.frame(old_column_name = colnames(data_raw),
                                 new_data_type = c("float", "date"),
                                 new_column_name = colnames(data),
@@ -156,7 +166,6 @@ testthat::test_that(".find_NA_coercions finds introduced NA's.", {
                          expected = data.frame(column = c("a_char", "a_char"),
                                                row = c(3, 4),
                                                value = c("a", "b"),
-                                               coerced_to = c(NA_character_, NA_character_),
                                                row.names = c(1L, 2L)))
   # find NA coercion when casting character to date
   testthat::expect_equal(object = .find_NA_coercions(data_raw = data_raw,
@@ -165,6 +174,14 @@ testthat::test_that(".find_NA_coercions finds introduced NA's.", {
                          expected = data.frame(column = "b_char",
                                                row = 4,
                                                value = "1970-99-01",
-                                               coerced_to = NA_character_,
                                                row.names = 3L))
+  # work with not finding any NA coercion
+  ## create a dataframe "data" that is the same as "data_raw"
+  data <- data.frame(a_numeric = c("1", "2", "a", "b"),
+                     b_date = c("1970-01-01", "1970-11-05", "1970-5-22", "1970-99-01"))
+  # run test, for which .find_NA_coercions should return an empty dataframe:
+  testthat::expect_equal(object = .find_NA_coercions(data_raw = data_raw,
+                                                     data = data,
+                                                     data_dictionary = data_dictionary),
+                         expected = data.frame())
 })
