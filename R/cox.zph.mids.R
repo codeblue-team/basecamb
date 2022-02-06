@@ -1,4 +1,4 @@
-# Method to test for violation of proportional odds for a cox-ph model on multiple imputations using cox.zph
+# Function to test for violation of proportional odds for a cox-ph model on multiple imputations using cox.zph
 
 
 #' Test cox proportional odds assumption on models using multiple imputation.
