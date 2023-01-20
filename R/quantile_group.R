@@ -4,7 +4,7 @@
 #' When grouping into n quantiles, the lowest 1/n of values are assigned 1, the highest 1/n are assigned n.
 #'
 #' @param data a vector of type numeric with values to be grouped into quantiles
-#' @param n integer indicating number of quantiles, minimum of 2. Must be smaller than than length(data)
+#' @param n integer indicating number of quantiles, minimum of 2. Must be smaller than length(data)
 #' @param na.rm logical; if TRUE all NA values will be removed before calculating groups, if FALSE no NA values are permitted.
 #'
 #' @return vector of length length(data) with the quantile groups
