@@ -1,16 +1,16 @@
 Package: basecamb
 Type: Package
 Title: Utilities for Streamlined Data Import, Imputation and Modelling
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: 
   c(person(given = "J. Peter",
            family = "Marquardt",
-           role = c("aut"),
+           role = c("aut", "cre"),
            email = "peter@kmarquardt.de",
            comment = c(ORCID = "0000-0002-5596-1357")),
     person(given = "Till D.",
            family = "Best",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "till-best@gmx.de",
            comment = c(ORCID = "0000-0001-7323-827X")))
 Description: Provides functions streamlining the data analysis workflow: 
@@ -28,7 +28,7 @@ Imports:
   purrr
 License: GPL (>= 3)
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
 Suggests: 
     testthat (>= 3.0.0),
