@@ -25,6 +25,11 @@ Tied values will be assigned to the lower quantile group rather than etsimating 
 
 If uneven group sizes cannot be avoided, values will be assigned the higher quantile group.
 }
+\examples{
+quantile_group(10:1, 3)
+quantile_group(c(rep(1,3), 10:1, NA), 5)
+
+}
 \author{
 J. Peter Marquardt
 }

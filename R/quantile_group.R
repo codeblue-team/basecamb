@@ -9,8 +9,8 @@
 #'
 #' @return vector of length length(data) with the quantile groups
 #'
-#' @example quantile_group(10:1, 3)
-#' @example quantile_group(c(rep(1,3), 10:1, NA), 5)
+#' @examples quantile_group(10:1, 3)
+#' @examples quantile_group(c(rep(1,3), 10:1, NA), 5)
 #'
 #' @details Tied values will be assigned to the lower quantile group rather than etsimating a distribution. In extreme cases this can mean one or more quantile groups are not represented.
 #' @details If uneven group sizes cannot be avoided, values will be assigned the higher quantile group.
