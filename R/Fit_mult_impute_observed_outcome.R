@@ -40,7 +40,19 @@ fit_mult_impute_obs_outcome <- function(mids,
   y_var <- deconstruct_formula(formula = formula)$outcome
 
   # fit models
-  mod <- Hmisc::fit.mult.impute(
+  if('fitargs' %in% names(formals(fit.mult.impute))) {
+    mod <- Hmisc::fit.mult.impute(
+      formula = formula, # model formula
+      fitter = fitter, # the type of model fitted
+      xtrans = mids, # the imputed dataset
+      pr = FALSE,
+      fitargs = list(x = TRUE, y = TRUE),
+      subset = !is.na(y_var), # subset the data for only those observations that have an observed outcome
+      ... # other arguments to fit.mult.impute()
+    )
+  }
+  else {
+    mod <- Hmisc::fit.mult.impute(
     formula = formula, # model formula
     fitter = fitter, # the type of model fitted
     xtrans = mids, # the imputed dataset
@@ -50,6 +62,9 @@ fit_mult_impute_obs_outcome <- function(mids,
     subset = !is.na(y_var), # subset the data for only those observations that have an observed outcome
     ... # other arguments to fit.mult.impute()
   )
+  }
+
+
 
   return(mod)
 }
