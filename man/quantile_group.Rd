@@ -9,7 +9,7 @@ quantile_group(data, n, na.rm = TRUE)
 \arguments{
 \item{data}{a vector of type numeric with values to be grouped into quantiles}
 
-\item{n}{integer indicating number of quantiles, minimum of 2. Must be smaller than than length(data)}
+\item{n}{integer indicating number of quantiles, minimum of 2. Must be smaller than length(data)}
 
 \item{na.rm}{logical; if TRUE all NA values will be removed before calculating groups, if FALSE no NA values are permitted.}
 }
