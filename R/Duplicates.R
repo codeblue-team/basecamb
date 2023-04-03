@@ -46,7 +46,7 @@ setduplicates <- function(vect) {
 #' @importFrom dplyr setdiff
 #'
 #' @examples
-#' # data <- data.frame(Study_ID = c("A", "B", "C", "D", "E"), ID = c(123, 456, 123, 789, 456), num_cars = c(10, 2, 10, 2, 5))
+#' # data <- data.frame(Study_ID = c("A", "B", "C"), ID = c(123, 456, 123), num_cars = c(10, 2, 10))
 #' # remove_duplicates(data, exclude_columns = "Study_ID")
 #' # remove_duplicates(data, exclude_columns = "Study_ID", ID_column = "ID")
 #' @export
