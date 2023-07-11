@@ -35,7 +35,6 @@ setduplicates <- function(vect) {
 #'
 #' Wraps unique()
 #'
-#'
 #' @param data data.frame to check
 #' @param exclude_columns character vector, these columns are not considered in determining whether two rows are equal
 #' @param ID_column character; column with identifiers to scan if possible duplicates remain
@@ -49,6 +48,7 @@ setduplicates <- function(vect) {
 #' # data <- data.frame(Study_ID = c("A", "B", "C"), ID = c(123, 456, 123), num_cars = c(10, 2, 10))
 #' # remove_duplicates(data, exclude_columns = "Study_ID")
 #' # remove_duplicates(data, exclude_columns = "Study_ID", ID_column = "ID")
+#'
 #' @export
 #'
 #' @author J. Peter Marquardt
