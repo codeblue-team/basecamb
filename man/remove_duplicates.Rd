@@ -33,6 +33,7 @@ Wraps unique()
 # data <- data.frame(Study_ID = c("A", "B", "C"), ID = c(123, 456, 123), num_cars = c(10, 2, 10))
 # remove_duplicates(data, exclude_columns = "Study_ID")
 # remove_duplicates(data, exclude_columns = "Study_ID", ID_column = "ID")
+
 }
 \author{
 J. Peter Marquardt
