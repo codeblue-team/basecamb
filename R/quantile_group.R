@@ -17,16 +17,15 @@
 #'
 #' @author J. Peter Marquardt
 #'
-#' @importFrom assertive.types assert_is_numeric
 #' @importFrom assertthat assert_that
 #'
 #' @export
 quantile_group <- function(data, n, na.rm=TRUE) {
 
   # Assertions
-  assertive.types::assert_is_numeric(data)
+  assertthat::assert_that(is.numeric(data))
   assertthat::assert_that(!any(is.na(data)) | na.rm)
-  assertive.types::is_numeric(n)
+  assertthat::assert_that(is.numeric(n))
   assertthat::assert_that(n %% 1 == 0)
   assertthat::assert_that(n >= 2)
   assertthat::assert_that(n < length(data))

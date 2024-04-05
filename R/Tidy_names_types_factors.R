@@ -38,7 +38,6 @@
 #'
 #' @return clean data.frame
 #'
-#' @importFrom assertive.types is_data.frame is_a_bool
 #' @importFrom assertthat assert_that
 #' @importFrom utils capture.output
 #'
@@ -50,10 +49,10 @@ apply_data_dictionary <- function(data,
                                   na_action_default = 'keep_NA',
                                   print_coerced_NA = TRUE) {
 
-  assertive.types::is_data.frame(data)
-  assertive.types::is_data.frame(data_dictionary)
+  assertthat::assert_that(is.data.frame(data))
+  assertthat::assert_that(is.data.frame(data_dictionary))
   assertthat::assert_that(na_action_default %in% c("keep_NA", "assign_default"))
-  assertive.types::is_a_bool(print_coerced_NA)
+  assertthat::assert_that(is.logical(print_coerced_NA))
 
   # save the input data to find NA introductions at the end
   data_raw <- data
@@ -130,16 +129,16 @@ apply_data_dictionary <- function(data,
 #'
 #' @return clean data.frame
 #'
-#' @importFrom assertive.types assert_is_data.frame
-#' @importFrom assertive.types assert_is_data.frame
+#' @importFrom assertthat assert_that
 #'
 #' @export
 #'
 #' @author J. Peter Marquardt
 assign_types_names <- function(data, meta_data) {
 
-  assertive.types::assert_is_data.frame(data)
-  assertive.types::assert_is_data.frame(meta_data)
+  assertthat::assert_that(is.data.frame(data))
+  assertthat::assert_that(is.data.frame(meta_data))
+
 
   # filtering out unused columns
   data_to_use <- meta_data[!is.na(meta_data$new_data_type),
@@ -223,8 +222,6 @@ assign_types_names <- function(data, meta_data) {
 #' keys_2 <- list('col1' = c('1' = 'One', 'default' = 'Not_One'))
 #' data_2 <- assign_factorial_levels(data, keys_2)
 #'
-#' @importFrom assertive.types assert_is_data.frame
-#' @importFrom assertive.types assert_is_list
 #' @importFrom assertthat assert_that
 #'
 #' @export
@@ -232,8 +229,8 @@ assign_types_names <- function(data, meta_data) {
 #' @author J. Peter Marquardt
 assign_factorial_levels <- function(data, factor_keys_values, na_action_default="keep_NA") {
 
-  assertive.types::assert_is_data.frame(data)
-  assertive.types::assert_is_list(factor_keys_values)
+  assertthat::assert_that(is.data.frame(data))
+  assertthat::assert_that(is.list(factor_keys_values))
   assertthat::assert_that(na_action_default %in% c("keep_NA", "assign_default"))
 
   for (col in names(factor_keys_values)) {
@@ -294,16 +291,15 @@ assign_factorial_levels <- function(data, factor_keys_values, na_action_default=
 #' data <- data.frame(date = rep('01/23/4567', 5))
 #' data <- parse_date_columns(data, list(date = '%m/%d/%Y'))
 #'
-#' @importFrom assertive.types assert_is_data.frame
-#' @importFrom assertive.types assert_is_list
+#' @importFrom assertthat assert_that
 #'
 #' @export
 #'
 #' @author J. Peter Marquardt
 parse_date_columns <- function(data, date_formats) {
 
-  assertive.types::assert_is_data.frame(data)
-  assertive.types::assert_is_list(date_formats)
+  assertthat::assert_that(is.data.frame(data))
+  assertthat::assert_that(is.list(date_formats))
 
   for (col in names(date_formats)) {
 
@@ -336,14 +332,14 @@ parse_date_columns <- function(data, date_formats) {
 #' @return named vector
 #'
 #'
-#' @importFrom assertive.types assert_is_character
+#' @importFrom assertthat assert_that
 #'
 #' @keywords internal
 #'
 #' @author J. Peter Marquardt
 .parse_string_to_named_vector <- function(str) {
 
-  assertive.types::assert_is_character(str)
+  assertthat::is.string(str)
 
   key_value_pairs <- strsplit(gsub("\"|\'| ", '', str), split = ",")[[1]]
 

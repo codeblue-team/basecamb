@@ -21,8 +21,8 @@
 #'
 #' fit_mult_impute_obs_outcome(mids = imputed_data, formula = Ozone ~ Solar.R + Wind, fitter = glm)
 #'
-#' @importFrom assertive.types assert_is_all_of
-#' @importFrom assertive.types assert_is_formula
+#' @importFrom assertthat assert_that
+#' @importFrom mice is.mids
 #' @importFrom Hmisc fit.mult.impute
 #' @importFrom stats formula
 #'
@@ -33,8 +33,8 @@ fit_mult_impute_obs_outcome <- function(mids,
                                         formula,
                                         fitter,
                                         ...) {
-  assertive.types::assert_is_all_of(x = mids, classes = "mids")
-  assertive.types::assert_is_formula(x = formula)
+  assertthat::assert_that(mice::is.mids(mids))
+  assertthat::assert_that(class(formula) == "formula")
 
   # get the outcome from the formula
   y_var <- deconstruct_formula(formula = formula)$outcome
@@ -87,9 +87,8 @@ fit_mult_impute_obs_outcome <- function(mids,
 #'
 #' @return a mids object filtered for observed cases of var.
 #'
-#' @importFrom mice filter
-#' @importFrom assertive.types assert_is_all_of
-#' @importFrom assertive.types assert_is_character
+#' @importFrom mice filter is.mids
+#' @importFrom assertthat assert_that is.string
 #'
 #' @export
 #'
@@ -100,8 +99,8 @@ remove_missing_from_mids <- function(mids, var) {
   .Deprecated(new='apply_function_to_imputed_data', package='basecamb')
 
   # assert that inputed is as expected
-  assertive.types::assert_is_all_of(x = mids, classes = "mids")
-  assertive.types::assert_is_character(var)
+  assertthat::assert_that(mice::is.mids(mids))
+  assertthat::is.string(var)
 
   # calculate a logical vector indicating cases with missing var
     miss_matrix <- is.na(mids$data[var])

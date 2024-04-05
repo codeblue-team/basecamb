@@ -19,20 +19,17 @@
 #' filter_nth_entry(data, 'ID', 'encounter', reverse_order = TRUE)
 #'
 #'
-#' @importFrom assertive.types assert_is_data.frame
-#' @importFrom assertive.types assert_is_character
-#' @importFrom assertive.types assert_is_a_number
-#' @importFrom assertive.types assert_is_a_bool
+#' @importFrom assertthat assert_that is.string is.number
 #'
 #' @export
 #'
 #' @author J. Peter Marquardt
 filter_nth_entry <- function(data, ID_column, entry_column, n=1, reverse_order=FALSE){
-  assertive.types::assert_is_data.frame(data)
-  assertive.types::assert_is_character(ID_column)
-  assertive.types::assert_is_character(entry_column)
-  assertive.types::assert_is_a_number(n)
-  assertive.types::assert_is_a_bool(reverse_order)
+  assertthat::assert_that(is.data.frame(data))
+  assertthat::is.string(ID_column)
+  assertthat::is.string(entry_column)
+  assertthat::is.number(n)
+  assertthat::assert_that(is.logical(reverse_order))
   stopifnot(ID_column %in% names(data))
   stopifnot(entry_column %in% names(data))
 

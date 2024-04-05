@@ -32,10 +32,7 @@
 #'
 #' or_model_summary(model = mod)
 #'
-#' @importFrom assertive.types assert_is_any_of
-#' @importFrom assertive.types assert_is_a_number
-#' @importFrom assertive.types assert_is_a_bool
-#' @importFrom assertive.types assert_is_numeric
+#' @importFrom assertthat assert_that is.number
 #' @importFrom stats pnorm
 #' @importFrom stats vcov
 #'
@@ -48,11 +45,12 @@ or_model_summary <- function(model,
                              round_est = 3,
                              round_p = 4) {
   # assert input
-  assertive.types::assert_is_any_of(x = model, classes = c("orm", "lrm", "rms", "glm"))
-  assertive.types::assert_is_a_number(conf_int)
-  assertive.types::assert_is_a_bool(print_intercept)
-  assertive.types::assert_is_numeric(round_est)
-  assertive.types::assert_is_numeric(round_p)
+  assertthat::assert_that(any(c("orm", "lrm", "rms", "glm") %in% class(model)))
+  assertthat::is.number(conf_int)
+  assertthat::assert_that(is.logical(print_intercept))
+  assertthat::is.number(round_est)
+  assertthat::is.number(round_p)
+
 
   # There's different ways of getting the variance of a model object depending
   #   on its class.
