@@ -30,9 +30,9 @@ Removes rows that are duplicates of another row in all columns except exclude_co
 Wraps unique()
 }
 \examples{
-# data <- data.frame(Study_ID = c("A", "B", "C"), ID = c(123, 456, 123), num_cars = c(10, 2, 10))
-# remove_duplicates(data, exclude_columns = "Study_ID")
-# remove_duplicates(data, exclude_columns = "Study_ID", ID_column = "ID")
+data <- data.frame(Study_ID = c("A", "B", "C"), ID = c(123, 456, 123), num_cars = c(10, 2, 10))
+remove_duplicates(data, exclude_columns = "Study_ID")
+remove_duplicates(data, exclude_columns = "Study_ID", ID_column = "ID")
 
 }
 \author{
