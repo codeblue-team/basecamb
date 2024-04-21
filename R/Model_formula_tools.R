@@ -15,15 +15,16 @@
 #' build_model_formula("outcome", c("pred_1", "pred_2"))
 #' build_model_formula("outcome", c("pred_1", "pred_2"), censor_event = "cens_event")
 #'
-#' @importFrom assertive.types assert_is_character
+#' @importFrom assertthat is.string
 #'
 #' @export
 #'
 #' @author J. Peter Marquardt
 build_model_formula <- function(outcome, predictors, censor_event=NULL, env = parent.frame()) {
 
-  assertive.types::assert_is_character(outcome)
-  assertive.types::assert_is_character(predictors)
+  assertthat::is.string(outcome)
+  assertthat::is.string(predictors)
+
 
   if(is.null(censor_event)) {  # standard formula
     frml <- as.formula(paste(outcome,
@@ -35,7 +36,7 @@ build_model_formula <- function(outcome, predictors, censor_event=NULL, env = pa
   }
 
   else {  # Survival-type formula
-    assertive.types::assert_is_character(censor_event)
+    assertthat::is.string(censor_event)
     frml <- as.formula(paste('Surv(',
                              outcome,
                              ', ',
@@ -68,7 +69,7 @@ build_model_formula <- function(outcome, predictors, censor_event=NULL, env = pa
 #' deconstruct_formula(stats::as.formula("outcome ~ predictor1 + predictor2 + predictor3"))
 #' deconstruct_formula(stats::as.formula("Surv(outcome, censor_event) ~ predictor"))
 #'
-#' @importFrom assertive.types assert_is_formula
+#' @importFrom assertthat assert_that
 #' @importFrom stats as.formula
 #'
 #' @export
@@ -76,7 +77,7 @@ build_model_formula <- function(outcome, predictors, censor_event=NULL, env = pa
 #' @author J. Peter Marquardt
 deconstruct_formula <- function(formula){
 
-  assertive.types::assert_is_formula(formula)
+  assertthat::assert_that("formula" %in% class(formula))
 
   # deparsing formula into string with no spaces and newlines
   form_string <- gsub(' ', '', gsub('\n', '', deparse1(formula, collapse = '')))

@@ -11,7 +11,7 @@
 #' @return The data with the newly scaled 'variables'.
 #'
 #' @importFrom dplyr pull
-#' @importFrom assertive.types assert_is_numeric assert_is_character
+#' @importFrom assertthat assert_that
 #'
 #' @export
 #'
@@ -31,8 +31,9 @@ scale_continuous_predictors.default <- function(data, scaling_dictionary) {
 scale_continuous_predictors.data.frame <- function(data, scaling_dictionary) {
 
   # check scaling_dictionary data types
-  assertive.types::assert_is_numeric(x = scaling_dictionary[["scaling_denominator"]])
-  assertive.types::assert_is_character(x = scaling_dictionary[["variable"]])
+  assertthat::assert_that(is.numeric(scaling_dictionary[["scaling_denominator"]]))
+  assertthat::assert_that(is.character(scaling_dictionary[["variable"]]))
+
   # remove cases where scaling is NA
   dict_df <- scaling_dictionary[!is.na(scaling_dictionary[['scaling_denominator']]), ]
 

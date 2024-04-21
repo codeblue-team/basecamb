@@ -1,7 +1,7 @@
 Package: basecamb
 Type: Package
 Title: Utilities for Streamlined Data Import, Imputation and Modelling
-Version: 1.1.3
+Version: 1.1.5
 Authors@R: 
   c(person(given = "J. Peter",
            family = "Marquardt",
@@ -18,14 +18,15 @@ Description: Provides functions streamlining the data analysis workflow:
   Manipulating imputed datasets and fitting models on them. Summarizing models.
 Depends: R (>= 4.0.0)
 Imports:
-  assertive.types,
   assertthat,
   dplyr,
   mice,
   Hmisc,
   survival,
   stats,
-  purrr
+  purrr,
+  MASS,
+  sae
 License: GPL (>= 3)
 Encoding: UTF-8
 RoxygenNote: 7.2.3
